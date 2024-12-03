@@ -2,6 +2,10 @@ body{
     background-color: #f5dada;
 }
 
+.main{
+    justify-content: center;
+}
+
 img{
     margin-left: 45%;
     margin-top: 8%;
@@ -20,3 +24,27 @@ p{
 ul{
     justify-self: center;
 }
+
+a:link{
+    color: rgb(104, 87, 87);
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+a:visited{
+    color: rgb(158, 92, 103);
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+a:hover{
+    color: rgb(41, 168, 168);
+    background-color: transparent;
+    text-decoration: underline;
+  }
+  
+a:active{
+    color: rgb(41, 168, 168);
+    background-color: transparent;
+    text-decoration: underline;
+  }
