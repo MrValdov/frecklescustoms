@@ -1,0 +1,22 @@
+body{
+    background-color: #f5dada;
+}
+
+img{
+    margin-left: 45%;
+    margin-top: 8%;
+    height: 1.2in;
+    width: 1.2in;
+}
+
+h2{
+    justify-self: center;
+}
+
+p{
+    justify-self: center;
+}
+
+ul{
+    justify-self: center;
+}
