@@ -1,14 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Architects+Daughter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing:content-box;
+  scroll-behavior: smooth;
+  text-align: center;
+}
+
+@font-face {
+  font-family: "Architects+Daughter", sans-serif;
+  src: url(Architects+Daughter.woff2) format('woff2');
+}
+
 body{
-    background-color: #f5dada;
+  user-select: none;
+  -webkit-user-drag: none;
+  background-color: #f5dada;
 }
 
 .main{
+  margin-top: 2%;
     justify-content: center;
+    grid-area: main;
+    justify-self: center;
+    place-self: center;
+    min-width: 0;
 }
 
 img{
-    margin-left: 45%;
-    margin-top: 8%;
+    justify-self: center;
     height: 1.2in;
     width: 1.2in;
 }
@@ -23,6 +44,10 @@ p{
 
 ul{
     justify-self: center;
+}
+
+li{
+  list-style-type: none;
 }
 
 a:link{
