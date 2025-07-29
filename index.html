@@ -1,60 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="style.css" />
-        <title>Freckles Customs</title>
-    </head>
-    <body>
-        <section>
-            <div class="main">
-                <img src="./assets/logo.png">
-                <h2>Thank you for visiting.</h2><br />
-                <p>This website is under construction, please visit us in the following Social Networks.</p>
-                <ul>
-                    <li><a href="https://www.facebook.com/frecklescustoms/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
-                    <li><a href="https://www.instagram.com/frecklescustoms/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-                    <li><a href="https://www.etsy.com/shop/frecklescustoms" target="_blank" rel="noopener noreferrer">Etsy</a></li>
-                    <li><a href="https://www.reddit.com/u/frecklescustoms/s/3GLUBtReig" target="_blank" rel="noopener noreferrer">Reddit</a></li>
-                </ul>
-            </div>
-            <div class="responsive">
-                <div class="gallery">
-                    <a  target="_blank" rel="noopener noreferrer" href="./assets/Mariana_Collection.jpg">
-                        <img src="./assets/Mariana_Collection.jpg" alt="Mariana's Collection" width="600" height="400">
-                    </a>
-                    <div class="desc">Mariana's collection</div>
-                </div>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freckles Customs</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Freckles Customs - Handmade apparel, gifts, and custom crafts. Visit our social links and shop on Etsy.">
+    <meta name="keywords" content="Freckles Customs, handmade crafts, Etsy shop, custom gifts, ribbons, apparel">
+    <meta name="author" content="Freckles Customs">
+
+    <!-- Open Graph / Social Preview -->
+    <meta property="og:title" content="Freckles Customs">
+    <meta property="og:description" content="Handmade gifts and apparel. Visit our Etsy shop!">
+    <meta property="og:image" content="./assets/logo.png">
+    <meta property="og:url" content="https://www.frecklescustoms.com">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Favicon -->
+    <link rel="icon" href="./assets/favicon.ico">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <section>
+        <div class="main">
+            <img src="./assets/logo.png" alt="Freckles Customs Logo">
+            <h2>Thank you for visiting.</h2><br />
+            <p>This website is under construction, please visit us in the following Social Networks.</p>
+            <ul>
+                <li><a href="https://www.facebook.com/frecklescustoms/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+                <li><a href="https://www.instagram.com/frecklescustoms/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                <li><a href="https://www.etsy.com/shop/frecklescustoms" target="_blank" rel="noopener noreferrer">Etsy</a></li>
+                <li><a href="https://www.reddit.com/u/frecklescustoms/s/3GLUBtReig" target="_blank" rel="noopener noreferrer">Reddit</a></li>
+            </ul>
+        </div>
+
+        <!-- Gallery Section -->
+        <div class="gallery">
+            <div class="gallery-item">
+                <img src="./assets/Mariana_Collection.jpg" alt="Mariana's collection" width="600" height="400" loading="lazy">
+                <div class="desc">Mariana's collection</div>
             </div>
 
-            <div class="responsive">
-                <div class="gallery">
-                    <a  target="_blank" rel="noopener noreferrer" href="./assets/Fiorella_Gifts.jpg">
-                        <img src="./assets/Fiorella_Gifts.jpg" alt="Forella's Gifts" width="600" height="400">
-                    </a>
-                    <div class="desc">Fiorella's Gifts</div>
-                </div>
+            <div class="gallery-item">
+                <img src="./assets/Fiorella_Gifts.jpg" alt="Fiorella's Gifts" width="600" height="400" loading="lazy">
+                <div class="desc">Fiorella's Gifts</div>
             </div>
 
-            <div class="responsive">
-                <div class="gallery">
-                    <a  target="_blank" rel="noopener noreferrer" href="./assets/shinny_ribbons.jpg">
-                        <img src="./assets/shinny_ribbons.jpg" alt="Shinny Ribbons" width="600" height="400">
-                    </a>
-                    <div class="desc">Shinny Ribbons</div>
-                </div>
+            <div class="gallery-item">
+                <img src="./assets/Shinny_Ribbons.jpg" alt="Shinny Ribbons" width="600" height="400" loading="lazy">
+                <div class="desc">Shinny Ribbons</div>
             </div>
 
-            <div class="responsive">
-                <div class="gallery">
-                    <a  target="_blank" rel="noopener noreferrer" href="./assets/Alvin_Apparel.jpg">
-                        <img src="./assets/Alvin_Apparel.jpg" alt="Alvin's Apparel" width="600" height="400">
-                    </a>
-                    <div class="desc">Alvin's Apparel</div>
-                </div>
+            <div class="gallery-item">
+                <img src="./assets/Alvin_Apparel.jpg" alt="Alvin's Apparel" width="600" height="400" loading="lazy">
+                <div class="desc">Alvin's Apparel</div>
             </div>
-        </section>
-        <script src="script.js"></script>
-    </body>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <span class="close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+        <div id="caption"></div>
+        <a class="prev">&#10094;</a>
+        <a class="next">&#10095;</a>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
 </html>
