@@ -2,8 +2,7 @@
 document.addEventListener('contextmenu', event => event.preventDefault());
 document.addEventListener('mousedown', event => event.preventDefault());
 
-// Lightbox functionality
-const galleryImages = document.querySelectorAll(".gallery img");
+// Lightbox Elements
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
 const caption = document.getElementById("caption");
@@ -12,47 +11,74 @@ const prevBtn = document.querySelector(".prev");
 const nextBtn = document.querySelector(".next");
 
 let currentIndex = 0;
+let categoryImages = [];
+let currentGalleryTitle = "";
 
-// Open lightbox when clicking an image
-galleryImages.forEach((img, index) => {
+// Define galleries (only filenames, no need for full paths)
+const galleries = {
+    mariana: ["mariana_1.jpg", "mariana_2.jpg", "mariana_3.jpg", "mariana_4.jpg", "mariana_5.jpg"],
+    fiorella: ["fiorella_1.jpg"],
+    shinny: ["shinny_1.jpg", "shinny_2.jpg"],
+    alvin: ["alvin_1.jpg", "alvin_2.jpg", "alvin_3.jpg"]
+};
+
+// Click event for thumbnails
+document.querySelectorAll(".gallery .gallery-item").forEach(item => {
+    const img = item.querySelector("img");
+    const galleryName = img.dataset.gallery;
+    const galleryTitle = item.querySelector(".desc").innerText;
+
     img.addEventListener("click", () => {
-        lightbox.style.display = "flex";
-        lightboxImg.src = img.src;
-        caption.innerText = img.alt;
-        currentIndex = index;
+        currentGalleryTitle = galleryTitle;
+
+        categoryImages = galleries[galleryName].map(file => ({
+            src: `./assets/${galleryName}/${file}`,
+            alt: galleryTitle
+        }));
+
+        currentIndex = 0;
+        openLightbox();
     });
 });
 
-// Close lightbox
-closeBtn.addEventListener("click", () => {
-    lightbox.style.display = "none";
-});
+// Open Lightbox
+function openLightbox() {
+    lightbox.style.display = "flex";
+    updateLightbox();
+}
+
+// Update Lightbox content
+function updateLightbox() {
+    lightboxImg.src = categoryImages[currentIndex].src;
+    lightboxImg.alt = currentGalleryTitle;
+    caption.innerText = currentGalleryTitle;
+}
 
 // Navigation
 prevBtn.addEventListener("click", () => changeImage(-1));
 nextBtn.addEventListener("click", () => changeImage(1));
 
 function changeImage(step) {
-    currentIndex = (currentIndex + step + galleryImages.length) % galleryImages.length;
-    lightboxImg.src = galleryImages[currentIndex].src;
-    caption.innerText = galleryImages[currentIndex].alt;
+    currentIndex = (currentIndex + step + categoryImages.length) % categoryImages.length;
+    updateLightbox();
 }
 
-// Close when clicking outside image
+// Close lightbox
+closeBtn.addEventListener("click", () => {
+    lightbox.style.display = "none";
+});
+
+// Close on outside click
 window.addEventListener("click", (e) => {
-    if (e.target === lightbox) {
-        lightbox.style.display = "none";
-    }
+    if (e.target === lightbox) lightbox.style.display = "none";
 });
 
-// Close with ESC key
+// Close on ESC
 window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-        lightbox.style.display = "none";
-    }
+    if (e.key === "Escape") lightbox.style.display = "none";
 });
 
-// ✅ Swipe Gesture Support for Mobile
+// Swipe Gesture Support for Mobile
 let touchStartX = 0;
 let touchEndX = 0;
 
@@ -66,13 +92,86 @@ lightbox.addEventListener("touchend", (e) => {
 }, false);
 
 function handleSwipe() {
-    const swipeThreshold = 50; // Minimum distance in px for swipe
-    if (touchEndX < touchStartX - swipeThreshold) {
-        // Swipe left → next image
-        changeImage(1);
-    }
-    if (touchEndX > touchStartX + swipeThreshold) {
-        // Swipe right → previous image
-        changeImage(-1);
-    }
+    const swipeThreshold = 50;
+    if (touchEndX < touchStartX - swipeThreshold) changeImage(1); // Swipe left
+    if (touchEndX > touchStartX + swipeThreshold) changeImage(-1); // Swipe right
 }
+
+// --- Mobile Hamburger Menu Toggle ---
+const hamburger = document.getElementById("hamburger");
+const navLinks = document.getElementById("nav-links");
+
+hamburger.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
+});
+
+// Close menu on link click (Mobile UX)
+document.querySelectorAll(".nav-links a").forEach(link => {
+    link.addEventListener("click", () => {
+        navLinks.classList.remove("active");
+    });
+});
+
+// --- Scroll-based Active Nav Highlight ---
+const sections = document.querySelectorAll("section");
+const navItems = document.querySelectorAll(".nav-links a");
+
+window.addEventListener("scroll", () => {
+    let current = "";
+
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop - 120; // Adjust for navbar height
+        const sectionHeight = section.clientHeight;
+        if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
+            current = section.getAttribute("id");
+        }
+    });
+
+    navItems.forEach(link => {
+        link.classList.remove("active");
+        if (link.getAttribute("href") === `#${current}`) {
+            link.classList.add("active");
+        }
+    });
+});
+
+// --- Fade-in Sections on Scroll ---
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+        }
+    });
+}, { threshold: 0.15 });
+
+sections.forEach(section => {
+    observer.observe(section);
+});
+
+// --- Staggered Animation for Gallery Items ---
+const galleryItems = document.querySelectorAll(".gallery-item");
+
+const galleryObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+            setTimeout(() => {
+                entry.target.classList.add("visible");
+            }, index * 100); // stagger delay
+        }
+    });
+}, { threshold: 0.2 });
+
+galleryItems.forEach(item => {
+    galleryObserver.observe(item);
+});
+
+// --- Navbar background fade on scroll ---
+const navbar = document.querySelector('.navbar');
+
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) {
+    navbar.classList.add('scrolled'); // ✅ Fade to white
+  } else {
+    navbar.classList.remove('scrolled'); // ✅ Return to pink
+  }
+});

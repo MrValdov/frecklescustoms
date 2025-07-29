@@ -18,27 +18,24 @@ body {
   -webkit-user-drag: none;
   background-color: #f5dada;
   font-family: "Architects Daughter", sans-serif;
+  padding-top: 80px; /* Push content below fixed navbar */
 }
 
+/* --- Section Layout & Fade-in Animation --- */
 section {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 40px 20px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-.main {
-  margin-top: 2%;
-  justify-content: center;
-  grid-area: main;
-  justify-self: center;
-  place-self: center;
-  min-width: 0;
-}
-
-.main img {
-  height: 1.2in;
-  width: 1.2in;
+section.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 h2, p, ul {
@@ -65,6 +62,100 @@ a:hover, a:active {
   text-decoration: underline;
 }
 
+/* --- Fixed Navigation Bar --- */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #f5dada; /* ✅ Match page color initially */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  flex-wrap: wrap;
+  transition: background-color 0.5s ease; /* ✅ Smooth fade */
+}
+
+.navbar.scrolled {
+  background: #fff; /* ✅ Changes to white after scroll */
+}
+
+.navbar .logo {
+  position: absolute;
+  left: 20px; /* ✅ Logo pinned left */
+}
+
+.navbar .logo img {
+  height: 50px;
+}
+
+/* --- Main Logo in Body --- */
+.main img {
+  height: 150px;
+  width: auto;
+  margin-bottom: 20px;
+}
+
+/* --- Navigation Links --- */
+.nav-links {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: rgb(104, 87, 87);
+  font-weight: 500;
+  transition: color 0.3s;
+  padding: 5px 0;
+}
+
+.nav-links a:hover {
+  color: rgb(41, 168, 168);
+  text-decoration: underline;
+}
+
+.nav-links a.active {
+  color: rgb(41, 168, 168);
+  text-decoration: underline;
+}
+
+/* --- Hamburger Menu (Mobile) --- */
+.hamburger {
+  position: absolute;
+  right: 20px; /* ✅ Hamburger pinned right */
+  font-size: 30px;
+  cursor: pointer;
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    padding: 10px 0;
+    border-top: 1px solid #ccc;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
 /* --- Gallery --- */
 .gallery {
   display: flex;
@@ -77,14 +168,20 @@ a:hover, a:active {
 
 .gallery-item {
   width: 180px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: none; /* ✅ Removed gray frame */
-  box-shadow: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.4s ease;
+}
+
+.gallery-item.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .gallery-item:hover {
-  transform: scale(1.03);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* ✅ Subtle hover shadow */
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  opacity: 0.95;
 }
 
 .gallery-item img {
@@ -92,7 +189,7 @@ a:hover, a:active {
   height: auto;
   cursor: pointer;
   display: block;
-  border-radius: 4px; /* Optional: soft rounded corners */
+  border-radius: 4px;
 }
 
 .desc {

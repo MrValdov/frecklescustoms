@@ -24,41 +24,91 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <section>
+    <!-- Fixed Navigation Bar -->
+    <header class="navbar">
+        <div class="logo">
+            <a href="#home"><img src="./assets/logo.png" alt="Freckles Customs Logo"></a>
+        </div>
+        <nav class="nav-links" id="nav-links">
+            <a href="#home">Home</a>
+            <a href="#bouquets">Bouquets</a>
+            <a href="#gifts">Gifts</a>
+            <a href="#stickers">Stickers</a>
+            <a href="#apparel">Apparel</a>
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact</a>
+            <a href="https://www.facebook.com/frecklescustoms/" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://www.instagram.com/frecklescustoms/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.etsy.com/shop/frecklescustoms" target="_blank" rel="noopener noreferrer">Etsy</a>
+            <a href="https://www.reddit.com/u/frecklescustoms/s/3GLUBtReig" target="_blank" rel="noopener noreferrer">Reddit</a>
+        </nav>
+        <div class="hamburger" id="hamburger">&#9776;</div>
+    </header>
+
+
+    <!-- Home Section -->
+    <section id="home">
         <div class="main">
             <img src="./assets/logo.png" alt="Freckles Customs Logo">
             <h2>Thank you for visiting.</h2><br />
             <p>This website is under construction, please visit us in the following Social Networks.</p>
-            <ul>
-                <li><a href="https://www.facebook.com/frecklescustoms/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
-                <li><a href="https://www.instagram.com/frecklescustoms/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-                <li><a href="https://www.etsy.com/shop/frecklescustoms" target="_blank" rel="noopener noreferrer">Etsy</a></li>
-                <li><a href="https://www.reddit.com/u/frecklescustoms/s/3GLUBtReig" target="_blank" rel="noopener noreferrer">Reddit</a></li>
-            </ul>
         </div>
+    </section>
 
-        <!-- Gallery Section -->
+    <!-- Bouquets Section -->
+    <section id="bouquets">
+        <h2>Bouquets</h2>
         <div class="gallery">
             <div class="gallery-item">
-                <img src="./assets/Mariana_Collection.jpg" alt="Mariana's collection" width="600" height="400" loading="lazy">
-                <div class="desc">Mariana's collection</div>
+                <img src="./assets/mariana/mariana_1.jpg" alt="Mariana's Collection" data-gallery="mariana">
+                <div class="desc">Mariana's Collection</div>
             </div>
+        </div>
+    </section>
 
+    <!-- Gifts Section -->
+    <section id="gifts">
+        <h2>Gifts</h2>
+        <div class="gallery">
             <div class="gallery-item">
-                <img src="./assets/Fiorella_Gifts.jpg" alt="Fiorella's Gifts" width="600" height="400" loading="lazy">
+                <img src="./assets/fiorella/fiorella_1.jpg" alt="Fiorella's Gifts" data-gallery="fiorella">
                 <div class="desc">Fiorella's Gifts</div>
             </div>
+        </div>
+    </section>
 
+    <!-- Stickers Section -->
+    <section id="stickers">
+        <h2>Stickers</h2>
+        <div class="gallery">
             <div class="gallery-item">
-                <img src="./assets/Shinny_Ribbons.jpg" alt="Shinny Ribbons" width="600" height="400" loading="lazy">
+                <img src="./assets/shinny/shinny_1.jpg" alt="Shinny Ribbons" data-gallery="shinny">
                 <div class="desc">Shinny Ribbons</div>
             </div>
+        </div>
+    </section>
 
+    <!-- Apparel Section -->
+    <section id="apparel">
+        <h2>Apparel</h2>
+        <div class="gallery">
             <div class="gallery-item">
-                <img src="./assets/Alvin_Apparel.jpg" alt="Alvin's Apparel" width="600" height="400" loading="lazy">
+                <img src="./assets/alvin/alvin_1.jpg" alt="Alvin's Apparel" data-gallery="alvin">
                 <div class="desc">Alvin's Apparel</div>
             </div>
         </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2>About Us</h2>
+        <p>We create handmade bouquets, gifts, stickers, and apparel customized for every occasion.</p>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2>Contact</h2>
+        <p>Email: frecklescustoms@gmail.com</p>
     </section>
 
     <!-- Lightbox Modal -->
