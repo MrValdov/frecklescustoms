@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Architects+Daughter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 
 * {
   margin: 0;
@@ -67,16 +68,16 @@ a:hover, a:active {
   position: fixed;
   top: 0;
   left: 0;
-  width: 95%;
-  background: #f5dada; /* Initial matches page background */
+  width: 100%; /* ✅ Full width restored */
+  background: #f5dada;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 10px 20px; /* ✅ Safe padding for both desktop & mobile */
   z-index: 1000;
   flex-wrap: wrap;
   transition: background-color 0.4s ease, box-shadow 0.4s ease;
-  box-shadow: none; /* No shadow initially */
+  box-shadow: none;
 }
 
 .navbar.scrolled {
@@ -92,7 +93,28 @@ a:hover, a:active {
 .main img {
   height: 150px;
   width: auto;
-  margin-bottom: 20px;
+  margin-bottom: 1px;
+}
+
+.main h2 {
+  font-family: 'Lobster', cursive;
+  font-size: 45px;
+  color: #000000; /* Main text color */
+  text-shadow: 
+    -5px -5px 0 white,
+     5px -5px 0 white,
+    -5px  5px 0 white,
+     5px  5px 0 white,
+     0px -5px 0 white,
+     0px  5px 0 white,
+    -5px  0px 0 white,
+     5px  0px 0 white; /* Creates an 8-direction stroke effect */
+}
+
+.reg-symbol {
+  font-size: 0.4em; /* Half the size of the parent text */
+  vertical-align: super; /* Lifts it up slightly */
+  margin-left: 5px; /* Small spacing from the brand name */
 }
 
 /* --- Navigation Links --- */
@@ -126,7 +148,7 @@ a:hover, a:active {
   display: none;
   font-size: 28px;
   cursor: pointer;
-  margin-right: 10px;
+  margin-right: 5px; /* ✅ Right margin prevents cropping */
 }
 
 @media screen and (max-width: 768px) {
@@ -148,7 +170,6 @@ a:hover, a:active {
 
   .hamburger {
     display: block;
-    position: relative;
   }
 
   body {
