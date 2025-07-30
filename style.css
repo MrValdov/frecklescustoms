@@ -18,7 +18,7 @@ body {
   -webkit-user-drag: none;
   background-color: #f5dada;
   font-family: "Architects Daughter", sans-serif;
-  padding-top: 80px; /* Push content below fixed navbar */
+  padding-top: 80px; /* Push content below navbar */
 }
 
 /* --- Section Layout & Fade-in Animation --- */
@@ -67,29 +67,25 @@ a:hover, a:active {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  background: #f5dada; /* ✅ Match page color initially */
+  width: 95%;
+  background: #f5dada; /* Initial matches page background */
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 10px 20px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   flex-wrap: wrap;
-  transition: background-color 0.5s ease; /* ✅ Smooth fade */
+  transition: background-color 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: none; /* No shadow initially */
 }
 
 .navbar.scrolled {
-  background: #fff; /* ✅ Changes to white after scroll */
-}
-
-.navbar .logo {
-  position: absolute;
-  left: 20px; /* ✅ Logo pinned left */
+  background: #fff; /* Fade to white */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Shadow only after scroll */
 }
 
 .navbar .logo img {
-  height: 50px;
+  height: 45px;
 }
 
 /* --- Main Logo in Body --- */
@@ -105,6 +101,7 @@ a:hover, a:active {
   gap: 15px;
   flex-wrap: wrap;
   justify-content: center;
+  flex: 1;
 }
 
 .nav-links a {
@@ -112,7 +109,6 @@ a:hover, a:active {
   color: rgb(104, 87, 87);
   font-weight: 500;
   transition: color 0.3s;
-  padding: 5px 0;
 }
 
 .nav-links a:hover {
@@ -127,11 +123,10 @@ a:hover, a:active {
 
 /* --- Hamburger Menu (Mobile) --- */
 .hamburger {
-  position: absolute;
-  right: 20px; /* ✅ Hamburger pinned right */
-  font-size: 30px;
-  cursor: pointer;
   display: none;
+  font-size: 28px;
+  cursor: pointer;
+  margin-right: 10px;
 }
 
 @media screen and (max-width: 768px) {
@@ -153,6 +148,11 @@ a:hover, a:active {
 
   .hamburger {
     display: block;
+    position: relative;
+  }
+
+  body {
+    padding-top: 65px; /* Adjust for smaller navbar height */
   }
 }
 
@@ -218,6 +218,8 @@ a:hover, a:active {
   max-height: 80%;
   margin-bottom: 15px;
   border-radius: 4px;
+  opacity: 1;
+  transition: opacity 0.4s ease;
 }
 
 .lightbox .close {

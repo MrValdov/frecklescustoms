@@ -14,7 +14,7 @@ let currentIndex = 0;
 let categoryImages = [];
 let currentGalleryTitle = "";
 
-// Define galleries (only filenames, no need for full paths)
+// Define galleries
 const galleries = {
     mariana: ["mariana_1.jpg", "mariana_2.jpg", "mariana_3.jpg", "mariana_4.jpg", "mariana_5.jpg"],
     fiorella: ["fiorella_1.jpg"],
@@ -30,12 +30,10 @@ document.querySelectorAll(".gallery .gallery-item").forEach(item => {
 
     img.addEventListener("click", () => {
         currentGalleryTitle = galleryTitle;
-
         categoryImages = galleries[galleryName].map(file => ({
             src: `./assets/${galleryName}/${file}`,
             alt: galleryTitle
         }));
-
         currentIndex = 0;
         openLightbox();
     });
@@ -47,11 +45,15 @@ function openLightbox() {
     updateLightbox();
 }
 
-// Update Lightbox content
+// Update Lightbox with fade effect
 function updateLightbox() {
-    lightboxImg.src = categoryImages[currentIndex].src;
-    lightboxImg.alt = currentGalleryTitle;
-    caption.innerText = currentGalleryTitle;
+    lightboxImg.style.opacity = 0;
+    setTimeout(() => {
+        lightboxImg.src = categoryImages[currentIndex].src;
+        lightboxImg.alt = currentGalleryTitle;
+        caption.innerText = currentGalleryTitle;
+        lightboxImg.style.opacity = 1;
+    }, 200);
 }
 
 // Navigation
@@ -81,97 +83,65 @@ window.addEventListener("keydown", (e) => {
 // Swipe Gesture Support for Mobile
 let touchStartX = 0;
 let touchEndX = 0;
-
-lightbox.addEventListener("touchstart", (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-}, false);
-
-lightbox.addEventListener("touchend", (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-}, false);
-
+lightbox.addEventListener("touchstart", (e) => { touchStartX = e.changedTouches[0].screenX; });
+lightbox.addEventListener("touchend", (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); });
 function handleSwipe() {
     const swipeThreshold = 50;
-    if (touchEndX < touchStartX - swipeThreshold) changeImage(1); // Swipe left
-    if (touchEndX > touchStartX + swipeThreshold) changeImage(-1); // Swipe right
+    if (touchEndX < touchStartX - swipeThreshold) changeImage(1);
+    if (touchEndX > touchStartX + swipeThreshold) changeImage(-1);
 }
 
 // --- Mobile Hamburger Menu Toggle ---
 const hamburger = document.getElementById("hamburger");
 const navLinks = document.getElementById("nav-links");
-
-hamburger.addEventListener("click", () => {
-    navLinks.classList.toggle("active");
-});
-
-// Close menu on link click (Mobile UX)
+hamburger.addEventListener("click", () => navLinks.classList.toggle("active"));
 document.querySelectorAll(".nav-links a").forEach(link => {
-    link.addEventListener("click", () => {
-        navLinks.classList.remove("active");
-    });
+    link.addEventListener("click", () => navLinks.classList.remove("active"));
 });
 
 // --- Scroll-based Active Nav Highlight ---
 const sections = document.querySelectorAll("section");
 const navItems = document.querySelectorAll(".nav-links a");
-
 window.addEventListener("scroll", () => {
     let current = "";
-
     sections.forEach(section => {
-        const sectionTop = section.offsetTop - 120; // Adjust for navbar height
+        const sectionTop = section.offsetTop - 120;
         const sectionHeight = section.clientHeight;
         if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
             current = section.getAttribute("id");
         }
     });
-
     navItems.forEach(link => {
         link.classList.remove("active");
-        if (link.getAttribute("href") === `#${current}`) {
-            link.classList.add("active");
-        }
+        if (link.getAttribute("href") === `#${current}`) link.classList.add("active");
     });
 });
 
 // --- Fade-in Sections on Scroll ---
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-        }
+        if (entry.isIntersecting) entry.target.classList.add("visible");
     });
 }, { threshold: 0.15 });
-
-sections.forEach(section => {
-    observer.observe(section);
-});
+sections.forEach(section => observer.observe(section));
 
 // --- Staggered Animation for Gallery Items ---
 const galleryItems = document.querySelectorAll(".gallery-item");
-
 const galleryObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
-            setTimeout(() => {
-                entry.target.classList.add("visible");
-            }, index * 100); // stagger delay
+            setTimeout(() => entry.target.classList.add("visible"), index * 100);
         }
     });
 }, { threshold: 0.2 });
+galleryItems.forEach(item => galleryObserver.observe(item));
 
-galleryItems.forEach(item => {
-    galleryObserver.observe(item);
-});
-
-// --- Navbar background fade on scroll ---
+// --- Navbar Background and Shadow Fade ---
 const navbar = document.querySelector('.navbar');
-
 window.addEventListener('scroll', () => {
-  if (window.scrollY > 50) {
-    navbar.classList.add('scrolled'); // ✅ Fade to white
-  } else {
-    navbar.classList.remove('scrolled'); // ✅ Return to pink
-  }
+    if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+    } else {
+        navbar.classList.remove('scrolled');
+    }
 });
