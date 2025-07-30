@@ -152,6 +152,15 @@ a:hover, a:active {
 }
 
 @media screen and (max-width: 768px) {
+  .main h2 {
+    font-size: 34px; /* Smaller but still legible */
+    text-shadow:
+      -2px -2px 0 white,
+       2px -2px 0 white,
+      -2px  2px 0 white,
+       2px  2px 0 white; /* Reduced stroke spread */
+  }
+  
   .nav-links {
     display: none;
     flex-direction: column;
