@@ -1,7 +1,6 @@
-// Disable right-click and dragging
-document.addEventListener('contextmenu', event => event.preventDefault());
-document.addEventListener('mousedown', event => event.preventDefault());
-
+// =========================
+// Language Loader (Centralized)
+// =========================
 const languageButtons = document.querySelectorAll(".language-selector button");
 
 function loadLanguage(lang) {
@@ -10,27 +9,34 @@ function loadLanguage(lang) {
         .then(translations => {
             document.querySelectorAll("[data-key]").forEach(el => {
                 const key = el.getAttribute("data-key");
-                if (translations[key]) el.textContent = translations[key];
+                if (translations[key]) {
+                    el.textContent = translations[key];
+                }
             });
-        });
-    localStorage.setItem("lang", lang); // remember selection
+            // Update <html lang> for accessibility & SEO
+            document.documentElement.setAttribute("lang", lang);
+        })
+        .catch(err => console.error("Error loading language file:", err));
+
+    // Highlight active language button
+    languageButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.lang === lang));
+
+    // Remember preference
+    localStorage.setItem("lang", lang);
 }
 
-// Event listeners
+// Initialize language on page load
+const savedLang = localStorage.getItem("lang") || (navigator.language.startsWith("es") ? "es" : "en");
+loadLanguage(savedLang);
+
+// Event listeners for language buttons
 languageButtons.forEach(btn => {
     btn.addEventListener("click", () => loadLanguage(btn.dataset.lang));
 });
 
-// Load saved language on page load
-const savedLang = localStorage.getItem("lang") || "en";
-loadLanguage(savedLang);
-
-if (!localStorage.getItem("lang")) {
-    const userLang = navigator.language.slice(0,2);
-    loadLanguage(userLang === "es" ? "es" : "en");
-}
-
-// Lightbox Elements
+// =========================
+// Lightbox Implementation
+// =========================
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
 const caption = document.getElementById("caption");
@@ -42,7 +48,14 @@ let currentIndex = 0;
 let categoryImages = [];
 let currentGalleryTitle = "";
 
-// Define galleries
+// Add ARIA roles for accessibility
+lightbox.setAttribute("role", "dialog");
+lightbox.setAttribute("aria-modal", "true");
+closeBtn.setAttribute("aria-label", "Close lightbox");
+prevBtn.setAttribute("aria-label", "Previous image");
+nextBtn.setAttribute("aria-label", "Next image");
+
+// Gallery definitions (map categories to images)
 const galleries = {
     mariana: ["mariana_1.jpg", "mariana_2.jpg", "mariana_3.jpg", "mariana_4.jpg", "mariana_5.jpg"],
     fiorella: ["fiorella_1.jpg"],
@@ -51,10 +64,9 @@ const galleries = {
 };
 
 // Click event for thumbnails
-document.querySelectorAll(".gallery .gallery-item").forEach(item => {
-    const img = item.querySelector("img");
+document.querySelectorAll(".gallery .gallery-item img").forEach(img => {
     const galleryName = img.dataset.gallery;
-    const galleryTitle = item.querySelector(".desc").innerText;
+    const galleryTitle = img.closest(".gallery-item").querySelector(".desc").innerText;
 
     img.addEventListener("click", () => {
         currentGalleryTitle = galleryTitle;
@@ -71,9 +83,10 @@ document.querySelectorAll(".gallery .gallery-item").forEach(item => {
 function openLightbox() {
     lightbox.style.display = "flex";
     updateLightbox();
+    lightbox.focus();
 }
 
-// Update Lightbox with fade effect
+// Update Lightbox
 function updateLightbox() {
     lightboxImg.style.opacity = 0;
     setTimeout(() => {
@@ -84,7 +97,7 @@ function updateLightbox() {
     }, 200);
 }
 
-// Navigation
+// Lightbox navigation
 prevBtn.addEventListener("click", () => changeImage(-1));
 nextBtn.addEventListener("click", () => changeImage(1));
 
@@ -93,41 +106,47 @@ function changeImage(step) {
     updateLightbox();
 }
 
-// Close lightbox
-closeBtn.addEventListener("click", () => {
-    lightbox.style.display = "none";
-});
-
-// Close on outside click
-window.addEventListener("click", (e) => {
-    if (e.target === lightbox) lightbox.style.display = "none";
-});
-
-// Close on ESC
-window.addEventListener("keydown", (e) => {
+// Close events
+closeBtn.addEventListener("click", () => (lightbox.style.display = "none"));
+window.addEventListener("click", e => { if (e.target === lightbox) lightbox.style.display = "none"; });
+window.addEventListener("keydown", e => {
     if (e.key === "Escape") lightbox.style.display = "none";
+    if (e.key === "ArrowRight") changeImage(1);
+    if (e.key === "ArrowLeft") changeImage(-1);
 });
 
-// Swipe Gesture Support for Mobile
+// Swipe Gesture Support
 let touchStartX = 0;
-let touchEndX = 0;
-lightbox.addEventListener("touchstart", (e) => { touchStartX = e.changedTouches[0].screenX; });
-lightbox.addEventListener("touchend", (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); });
-function handleSwipe() {
+lightbox.addEventListener("touchstart", e => { touchStartX = e.changedTouches[0].screenX; });
+lightbox.addEventListener("touchend", e => {
+    const touchEndX = e.changedTouches[0].screenX;
     const swipeThreshold = 50;
     if (touchEndX < touchStartX - swipeThreshold) changeImage(1);
     if (touchEndX > touchStartX + swipeThreshold) changeImage(-1);
-}
-
-// --- Mobile Hamburger Menu Toggle ---
-const hamburger = document.getElementById("hamburger");
-const navLinks = document.getElementById("nav-links");
-hamburger.addEventListener("click", () => navLinks.classList.toggle("active"));
-document.querySelectorAll(".nav-links a").forEach(link => {
-    link.addEventListener("click", () => navLinks.classList.remove("active"));
 });
 
-// --- Scroll-based Active Nav Highlight ---
+// =========================
+// Hamburger Menu (Mobile)
+// =========================
+const hamburger = document.getElementById("hamburger");
+const navLinks = document.getElementById("nav-links");
+hamburger.setAttribute("aria-label", "Toggle navigation menu");
+hamburger.setAttribute("aria-expanded", "false");
+
+hamburger.addEventListener("click", () => {
+    const isActive = navLinks.classList.toggle("active");
+    hamburger.setAttribute("aria-expanded", isActive);
+});
+document.querySelectorAll(".nav-links a").forEach(link => {
+    link.addEventListener("click", () => {
+        navLinks.classList.remove("active");
+        hamburger.setAttribute("aria-expanded", "false");
+    });
+});
+
+// =========================
+// Scroll-based Active Nav Highlight
+// =========================
 const sections = document.querySelectorAll("section");
 const navItems = document.querySelectorAll(".nav-links a");
 window.addEventListener("scroll", () => {
@@ -140,56 +159,48 @@ window.addEventListener("scroll", () => {
         }
     });
     navItems.forEach(link => {
-        link.classList.remove("active");
-        if (link.getAttribute("href") === `#${current}`) link.classList.add("active");
+        link.classList.toggle("active", link.getAttribute("href") === `#${current}`);
     });
 });
 
-// --- Fade-in Sections on Scroll ---
-const observer = new IntersectionObserver((entries) => {
+// =========================
+// Fade-in Animations
+// =========================
+const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add("visible");
     });
 }, { threshold: 0.15 });
 sections.forEach(section => observer.observe(section));
 
-// --- Staggered Animation for Gallery Items ---
 const galleryItems = document.querySelectorAll(".gallery-item");
-const galleryObserver = new IntersectionObserver((entries) => {
+const galleryObserver = new IntersectionObserver(entries => {
     entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-            setTimeout(() => entry.target.classList.add("visible"), index * 100);
-        }
+        if (entry.isIntersecting) setTimeout(() => entry.target.classList.add("visible"), index * 100);
     });
 }, { threshold: 0.2 });
 galleryItems.forEach(item => galleryObserver.observe(item));
 
-// --- Navbar Background and Shadow Fade ---
+// =========================
+// Navbar Background Scroll Effect
+// =========================
 const navbar = document.querySelector('.navbar');
 window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
-    }
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
 });
 
-// --- Filter Buttons ---
+// =========================
+// Filter Buttons
+// =========================
 const filterButtons = document.querySelectorAll(".filter-btn");
 const galleryItemsAll = document.querySelectorAll(".gallery-item");
-
 filterButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    filterButtons.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    const category = btn.dataset.filter;
-
-    galleryItemsAll.forEach(item => {
-      if (category === "all" || item.classList.contains(category)) {
-        item.style.display = "block";
-      } else {
-        item.style.display = "none";
-      }
+    btn.addEventListener("click", () => {
+        filterButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const category = btn.dataset.filter;
+        galleryItemsAll.forEach(item => {
+            item.style.display = (category === "all" || item.classList.contains(category)) ? "block" : "none";
+        });
     });
-  });
 });

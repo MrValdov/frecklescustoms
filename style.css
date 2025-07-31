@@ -161,17 +161,18 @@ a:hover, a:active {
 
 .language-selector button {
   background: #fff;
-  border: 1px solid #a66;
+  border: 2px solid #a66;
   color: #a66;
   padding: 5px 10px;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 20px;
   font-family: "Architects Daughter", sans-serif;
   font-size: 14px;
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-.language-selector button:hover {
+.language-selector button:hover,
+.language-selector button.active {
   background: #a66;
   color: #fff;
 }
