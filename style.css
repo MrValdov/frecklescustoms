@@ -89,6 +89,11 @@ a:hover, a:active {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Shadow only after scroll */
 }
 
+.nav-placeholder {
+  display: inline-block;
+  width: 80px; /* Equal width to offset the logo size */
+}
+
 .navbar .logo img {
   height: 45px;
 }
@@ -191,6 +196,12 @@ a:hover, a:active {
 }
 
 /* --- Gallery --- */
+/* Reduce spacing of brand header specifically on gallery page */
+.gallery-page .brand-header {
+  padding: 0 0 0 0; /* Half the default padding */
+  margin-bottom: 0;   /* Remove extra gap below */
+}
+
 .gallery {
   display: flex;
   flex-wrap: wrap;
@@ -321,6 +332,7 @@ a:hover, a:active {
 }
 
 .filter-btn {
+  font-family: "Architects Daughter", sans-serif; /* Match page font */
   background: #fff;
   border: 2px solid #a66;
   color: #a66;
@@ -335,4 +347,22 @@ a:hover, a:active {
 .filter-btn:hover {
   background: #a66;
   color: #fff;
+}
+
+/* --- Footer --- */
+.footer {
+    background-color: #f5dada;
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+    color: #555;
+    border-top: 1px solid #ccc;
+    margin-top: 30px;
+}
+
+/* --- Contact Logo --- */
+.contact-logo {
+    height: 80px;
+    width: auto;
+    margin: 10px 0;
 }
