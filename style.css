@@ -14,6 +14,10 @@
   src: url(Architects+Daughter.woff2) format('woff2');
 }
 
+html {
+  scrollbar-gutter: stable overlay; /* ✅ Prevents layout shift & overlap */
+}
+
 body {
   user-select: none;
   -webkit-user-drag: none;
@@ -148,7 +152,7 @@ a:hover, a:active {
   display: none;
   font-size: 28px;
   cursor: pointer;
-  margin-right: 5px; /* ✅ Right margin prevents cropping */
+  margin-right: 25px; /* ✅ Right margin prevents cropping */
 }
 
 @media screen and (max-width: 768px) {
@@ -305,4 +309,30 @@ a:hover, a:active {
     max-width: 95%;
     max-height: 60%;
   }
+}
+
+/* Filter Buttons */
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: #fff;
+  border: 2px solid #a66;
+  color: #a66;
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+  background: #a66;
+  color: #fff;
 }

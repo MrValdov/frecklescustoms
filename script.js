@@ -145,3 +145,23 @@ window.addEventListener('scroll', () => {
         navbar.classList.remove('scrolled');
     }
 });
+
+// --- Filter Buttons ---
+const filterButtons = document.querySelectorAll(".filter-btn");
+const galleryItemsAll = document.querySelectorAll(".gallery-item");
+
+filterButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    filterButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const category = btn.dataset.filter;
+
+    galleryItemsAll.forEach(item => {
+      if (category === "all" || item.classList.contains(category)) {
+        item.style.display = "block";
+      } else {
+        item.style.display = "none";
+      }
+    });
+  });
+});
