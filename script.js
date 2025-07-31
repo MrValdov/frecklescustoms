@@ -2,6 +2,34 @@
 document.addEventListener('contextmenu', event => event.preventDefault());
 document.addEventListener('mousedown', event => event.preventDefault());
 
+const languageButtons = document.querySelectorAll(".language-selector button");
+
+function loadLanguage(lang) {
+    fetch(`./lang/${lang}.json`)
+        .then(res => res.json())
+        .then(translations => {
+            document.querySelectorAll("[data-key]").forEach(el => {
+                const key = el.getAttribute("data-key");
+                if (translations[key]) el.textContent = translations[key];
+            });
+        });
+    localStorage.setItem("lang", lang); // remember selection
+}
+
+// Event listeners
+languageButtons.forEach(btn => {
+    btn.addEventListener("click", () => loadLanguage(btn.dataset.lang));
+});
+
+// Load saved language on page load
+const savedLang = localStorage.getItem("lang") || "en";
+loadLanguage(savedLang);
+
+if (!localStorage.getItem("lang")) {
+    const userLang = navigator.language.slice(0,2);
+    loadLanguage(userLang === "es" ? "es" : "en");
+}
+
 // Lightbox Elements
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");

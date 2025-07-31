@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gallery - Freckles Customs</title>
+  <title data-key="galleryTitle">Gallery - Freckles Customs</title>
+  <link rel="icon" href="./assets/logo.png" type="image/png">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="gallery-page">
@@ -13,31 +14,35 @@
       <a href="index.html"><img src="./assets/logo.png" alt="Freckles Customs Logo"></a>
     </div>
     <nav class="nav-links" id="nav-links">
-      <a href="index.html#home">Home</a>
-      <a href="gallery.html" class="active">Gallery</a>
-      <span class="nav-placeholder"></span>
+      <a href="index.html#home" data-key="home">Home</a>
+      <a href="gallery.html" class="active" data-key="gallery">Gallery</a>
     </nav>
+    <div class="language-selector">
+      <button data-lang="en">EN</button>
+      <button data-lang="es">ES</button>
+    </div>
     <div class="hamburger" id="hamburger">&#9776;</div>
   </header>
 
-<section class="brand-header">
-  <div class="main">
-    <h2>Freckles Customs<span class="reg-symbol">®</span></h2>
-    <p>Crafted by Hand, Inspired by You.</p>
-  </div>
-</section>
+  <!-- Brand Header -->
+  <section class="brand-header">
+    <div class="main">
+      <h2>Freckles Customs<span class="reg-symbol">®</span></h2>
+      <p data-key="slogan">Crafted by Hand, Inspired by You.</p>
+    </div>
+  </section>
 
   <!-- Gallery Section -->
   <section id="gallery-page">
-    <h2>Photo Gallery</h2><br>
+    <h2 data-key="galleryTitle">Photo Gallery</h2><br>
 
     <!-- Filter Buttons -->
     <div class="filter-buttons">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="bouquets">Bouquets</button>
-      <button class="filter-btn" data-filter="gifts">Gifts</button>
-      <button class="filter-btn" data-filter="ribbons">Ribbons</button>
-      <button class="filter-btn" data-filter="apparel">Apparel</button>
+      <button class="filter-btn active" data-filter="all" data-key="filterAll">All</button>
+      <button class="filter-btn" data-filter="bouquets" data-key="bouquets">Bouquets</button>
+      <button class="filter-btn" data-filter="gifts" data-key="gifts">Gifts</button>
+      <button class="filter-btn" data-filter="ribbons" data-key="ribbons">Ribbons</button>
+      <button class="filter-btn" data-filter="apparel" data-key="apparel">Apparel</button>
     </div>
 
     <!-- Unified Gallery -->
@@ -91,8 +96,30 @@
 
   <script src="script.js"></script>
   <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2025 Freckles Customs. All rights reserved.</p>
-    </footer>
+  <footer class="footer">
+    <p>&copy; 2025 Freckles Customs. All rights reserved.</p>
+  </footer>
+
+  <!-- Language Loader -->
+  <script>
+    function loadLanguage(lang) {
+      fetch(`./lang/${lang}.json`)
+        .then(res => res.json())
+        .then(translations => {
+          document.querySelectorAll("[data-key]").forEach(el => {
+            const key = el.getAttribute("data-key");
+            if (translations[key]) el.textContent = translations[key];
+          });
+        });
+      localStorage.setItem("lang", lang);
+    }
+
+    document.querySelectorAll(".language-selector button").forEach(btn => {
+      btn.addEventListener("click", () => loadLanguage(btn.dataset.lang));
+    });
+
+    const savedLang = localStorage.getItem("lang") || "en";
+    loadLanguage(savedLang);
+  </script>
 </body>
 </html>

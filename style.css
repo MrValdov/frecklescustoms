@@ -152,6 +152,30 @@ a:hover, a:active {
   text-decoration: underline;
 }
 
+/* Language Selector Styling */
+.language-selector {
+  display: flex;
+  gap: 5px;
+  margin-right: 35px; /* Small gap from the nav links */
+}
+
+.language-selector button {
+  background: #fff;
+  border: 1px solid #a66;
+  color: #a66;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: "Architects Daughter", sans-serif;
+  font-size: 14px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.language-selector button:hover {
+  background: #a66;
+  color: #fff;
+}
+
 /* --- Hamburger Menu (Mobile) --- */
 .hamburger {
   display: none;
@@ -188,6 +212,17 @@ a:hover, a:active {
 
   .hamburger {
     display: block;
+  }
+
+  .language-selector {
+    position: absolute;
+    top: 25px;
+    right: 50px; /* Place them near the hamburger */
+  }
+
+  .language-selector button {
+    padding: 4px 8px;
+    font-size: 12px;
   }
 
   body {
