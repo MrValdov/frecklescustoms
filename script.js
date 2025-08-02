@@ -35,6 +35,17 @@ languageButtons.forEach(btn => {
 });
 
 // =========================
+// Block Right Click in Brands Section
+// =========================
+const brandsSection = document.getElementById("brands");
+
+if (brandsSection) {
+    brandsSection.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+    });
+}
+
+// =========================
 // Lightbox Implementation
 // =========================
 const lightbox = document.getElementById("lightbox");
