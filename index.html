@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self';
+    style-src 'self' https://fonts.googleapis.com;
+    font-src https://fonts.gstatic.com;
+    img-src 'self' data: blob:;
+    object-src 'none';
+    base-uri 'none';
+    frame-ancestors 'none';
+    form-action 'self';
+    upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Freckles Customs</title>
@@ -77,8 +90,12 @@
     <section id="bouquets" aria-labelledby="bouquets-title">
         <h2 id="bouquets-title" data-key="bouquets">Bouquets</h2>
         <div class="gallery">
-            <div class="gallery-item">
-                <img src="./assets/mariana/mariana_1.jpg" alt="Bouquet from Mariana's Collection" data-gallery="mariana">
+            <div class="gallery-item bouquets">
+                <img src="./assets/mariana/mariana_001.jpg" alt="Bouquet from Mariana's Collection" data-gallery="mariana">
+                <div class="desc">Mariana's Collection</div>
+            </div>
+            <div class="gallery-item bouquets">
+                <img src="./assets/mariana/mariana_002.jpg" alt="Bouquet from Mariana's Collection" data-gallery="mariana">
                 <div class="desc">Mariana's Collection</div>
             </div>
         </div>
@@ -89,7 +106,11 @@
         <h2 id="gifts-title" data-key="gifts">Gifts</h2>
         <div class="gallery">
             <div class="gallery-item">
-                <img src="./assets/fiorella/fiorella_1.jpg" alt="Gift from Fiorella's Collection" data-gallery="fiorella">
+                <img src="./assets/fiorella/fiorella_001.jpg" alt="Gift from Fiorella's Collection" data-gallery="fiorella">
+                <div class="desc">Fiorella's Gifts</div>
+            </div>
+            <div class="gallery-item">
+                <img src="./assets/fiorella/fiorella_002.jpg" alt="Gift from Fiorella's Collection" data-gallery="fiorella">
                 <div class="desc">Fiorella's Gifts</div>
             </div>
         </div>
@@ -100,7 +121,11 @@
         <h2 id="ribbons-title" data-key="ribbons">Ribbons</h2>
         <div class="gallery">
             <div class="gallery-item">
-                <img src="./assets/shinny/shinny_1.jpg" alt="Ribbon from Shinny Collection" data-gallery="shinny">
+                <img src="./assets/shinny/shinny_001.jpg" alt="Ribbon from Shinny Collection" data-gallery="shinny">
+                <div class="desc">Shinny Ribbons</div>
+            </div>
+            <div class="gallery-item">
+                <img src="./assets/shinny/shinny_002.jpg" alt="Ribbon from Shinny Collection" data-gallery="shinny">
                 <div class="desc">Shinny Ribbons</div>
             </div>
         </div>
@@ -111,7 +136,11 @@
         <h2 id="apparel-title" data-key="apparel">Apparel</h2>
         <div class="gallery">
             <div class="gallery-item">
-                <img src="./assets/alvin/alvin_1.jpg" alt="Apparel from Alvin's Collection" data-gallery="alvin">
+                <img src="./assets/alvin/alvin_001.jpg" alt="Apparel from Alvin's Collection" data-gallery="alvin">
+                <div class="desc">Alvin's Apparel</div>
+            </div>
+            <div class="gallery-item">
+                <img src="./assets/alvin/alvin_002.jpg" alt="Apparel from Alvin's Collection" data-gallery="alvin">
                 <div class="desc">Alvin's Apparel</div>
             </div>
         </div>
@@ -128,7 +157,12 @@
         <h2 id="contact-title" data-key="contact">Contact</h2>
         <img src="./assets/logo_2.png" alt="Freckles Customs Secondary Logo" class="contact-logo">
         <p data-key="contactEmail">Email: frecklescustoms@gmail.com</p>
-        <a href="mailto:frecklescustoms@gmail.com" class="mailto-btn" aria-label="Send us an email">Click here to send Us an Email</a>
+        <a href="mailto:frecklescustoms@gmail.com"
+            class="mailto-btn"
+            data-key="mailtoCta"
+            data-i18n-attr="aria-label:mailtoCtaLabel"
+            aria-label="Send us an email">Click here to send Us an Email
+        </a>
     </section>
 
     <!-- Lightbox Modal -->

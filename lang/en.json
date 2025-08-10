@@ -12,5 +12,7 @@
     "aboutText": "We create handmade bouquets, gifts, ribbons, and apparel customized for every occasion.",
     "contactEmail": "Email: frecklescustoms@gmail.com",
     "galleryTitle": "Photo Gallery",
-    "filterAll": "All"
+    "filterAll": "All",
+    "mailtoCta": "Click here to send us an email",
+    "mailtoCtaLabel": "Send us an email"
 }
