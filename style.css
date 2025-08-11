@@ -287,7 +287,7 @@ a:hover, a:active {
 .lightbox {
   display: none;
   position: fixed;
-  z-index: 999;
+  z-index: 2000;
   left: 0;
   top: 0;
   width: 100%;
@@ -445,4 +445,64 @@ a:hover, a:active {
         max-height: 60px;
         max-width: 120px;
     }
+}
+
+/* Lightbox zoom controls */
+.lightbox .controls {
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 2001; /* above arrows */
+}
+
+.lightbox .controls button {
+  background: #fff;
+  border: 2px solid #a66;
+  color: #a66;
+  padding: 6px 10px;
+  border-radius: 16px;
+  font-family: "Architects Daughter", sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lightbox .controls button:hover {
+  background: #a66;
+  color: #fff;
+}
+
+/* Visual hint for panning when zoomed */
+.lightbox.zoomed #lightbox-img {
+  cursor: grab;
+  touch-action: none; /* allow custom pan on touch */
+}
+
+.lightbox.zoomed #lightbox-img:active {
+  cursor: grabbing;
+}
+
+/* Ensure transforms behave smoothly */
+#lightbox-img {
+  will-change: transform, opacity;
+  transition: transform 0.1s ease; /* snappy pan/zoom */
+}
+
+/* Keep a little vertical breathing room between items in the lightbox */
+.lightbox { gap: 8px; }
+
+/* Make sure caption has space before controls */
+#caption { margin-top: 6px; }
+
+/* On desktop, stack controls under caption (no overlap) */
+@media (min-width: 769px) {
+  .lightbox .controls {
+    position: static;   /* was absolute in some versions */
+    transform: none;
+    bottom: auto;
+    left: auto;
+    margin-top: 6px;
+  }
 }
