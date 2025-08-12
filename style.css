@@ -506,3 +506,10 @@ a:hover, a:active {
     margin-top: 6px;
   }
 }
+
+/* If IntersectionObserver is missing or blocked, don't hide content */
+.no-io section,
+.no-io .gallery-item {
+  opacity: 1 !important;
+  transform: none !important;
+}

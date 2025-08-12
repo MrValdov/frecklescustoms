@@ -51,6 +51,11 @@ if (brandsSection) brandsSection.addEventListener("contextmenu", e => e.preventD
    ========================= */
 const IS_GALLERY_PAGE = document.body.classList.contains("gallery-page");
 
+if (IS_GALLERY_PAGE) {
+  document.querySelectorAll('.brand-header, #gallery-page')
+    .forEach(s => s.classList.add('visible'));
+}
+
 function buildNames(prefix, count, pad = 0, start = 1) {
   return Array.from({ length: count }, (_, i) =>
     `${prefix}${String(i + start).padStart(pad, "0")}.jpg`
@@ -58,26 +63,53 @@ function buildNames(prefix, count, pad = 0, start = 1) {
 }
 
 /* =========================
-   Fade-in animations
+   Fade-in animations (with mobile-safe fallback)
    ========================= */
-const sectionObserver = new IntersectionObserver(entries => {
-  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add("visible"); });
-},{ threshold: 0.08, rootMargin: "120px 0px" });
+const SUPPORTS_IO = "IntersectionObserver" in window;
 
-document.querySelectorAll("section").forEach(s => sectionObserver.observe(s));
+let sectionObserver = null;
+let galleryIO = null;
 
-const galleryIO = new IntersectionObserver(entries => {
-  entries.forEach((entry, idx) => {
-    if (entry.isIntersecting) {
-      setTimeout(() => entry.target.classList.add("visible"), idx * 80);
-      galleryIO.unobserve(entry.target);
-    }
-  });
-},{ threshold: 0.08, rootMargin: "140px 0px" });
+if (SUPPORTS_IO) {
+  sectionObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add("visible");
+    });
+  }, { threshold: 0.08, rootMargin: "120px 0px" });
+
+  document.querySelectorAll("section").forEach(s => sectionObserver.observe(s));
+
+  galleryIO = new IntersectionObserver(entries => {
+    entries.forEach((entry, idx) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add("visible"), idx * 80);
+        galleryIO.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: "140px 0px" });
+} else {
+  // Fallback: reveal everything immediately so nothing is invisible
+  document.documentElement.classList.add("no-io");
+  document.querySelectorAll("section").forEach(s => s.classList.add("visible"));
+}
 
 function observeNewGalleryItems(root = document) {
-  root.querySelectorAll(".gallery-item").forEach(item => galleryIO.observe(item));
+  const items = root.querySelectorAll(".gallery-item");
+  if (SUPPORTS_IO && galleryIO) {
+    items.forEach(item => galleryIO.observe(item));
+  } else {
+    items.forEach(item => item.classList.add("visible")); // ensure thumbnails show
+  }
 }
+
+// If no section became visible soon after load, reveal them
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    if (!document.querySelector('section.visible')) {
+      document.querySelectorAll('section').forEach(s => s.classList.add('visible'));
+    }
+  }, 700);
+});
 
 /* =========================
    Build the galleries map from config (both pages)
