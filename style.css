@@ -4,11 +4,10 @@
   * { animation: none !important; transition: none !important; }
 }
 
-
 * {
   margin: 0;
   padding: 0;
-  box-sizing: content-box;
+  box-sizing: border-box; /* switched from content-box */
   scroll-behavior: smooth;
   text-align: center;
 }
@@ -76,7 +75,7 @@ a:hover, a:active {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%; /* ✅ Full width restored */
+  width: 100%;
   background: #f5dada;
   display: flex;
   align-items: center;
@@ -189,57 +188,11 @@ a:hover, a:active {
   margin-right: 25px; /* ✅ Right margin prevents cropping */
 }
 
-@media screen and (max-width: 768px) {
-  .main h2 {
-    font-size: 34px; /* Smaller but still legible */
-    text-shadow:
-      -2px -2px 0 white,
-       2px -2px 0 white,
-      -2px  2px 0 white,
-       2px  2px 0 white; /* Reduced stroke spread */
-  }
-  
-  .nav-links {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 60px;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    padding: 10px 0;
-    border-top: 1px solid #ccc;
-  }
-
-  .nav-links.active {
-    display: flex;
-  }
-
-  .hamburger {
-    display: block;
-  }
-
-  .language-selector {
-    position: absolute;
-    top: 25px;
-    right: 50px; /* Place them near the hamburger */
-  }
-
-  .language-selector button {
-    padding: 4px 8px;
-    font-size: 12px;
-  }
-
-  body {
-    padding-top: 65px; /* Adjust for smaller navbar height */
-  }
-}
-
 /* --- Gallery --- */
 /* Reduce spacing of brand header specifically on gallery page */
 .gallery-page .brand-header {
-  padding: 0 0 0 0; /* Half the default padding */
-  margin-bottom: 0;   /* Remove extra gap below */
+  padding: 0 0 0 0;
+  margin-bottom: 0;
 }
 
 .gallery {
@@ -341,8 +294,59 @@ a:hover, a:active {
 
 /* --- Responsive Design --- */
 @media screen and (max-width: 768px) {
+  .main h2 {
+    font-size: 34px; /* Smaller but still legible */
+    text-shadow:
+      -2px -2px 0 white,
+       2px -2px 0 white,
+      -2px  2px 0 white,
+       2px  2px 0 white; /* Reduced stroke spread */
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    padding: 10px 0;
+    border-top: 1px solid #ccc;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  /* safer placement; avoids overlapping the hamburger */
+  .language-selector {
+    position: static;        /* was absolute */
+    margin: 8px 0 0 0;
+    align-self: flex-end;
+    display: flex;
+    gap: 6px;
+  }
+
+  .language-selector button {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  body {
+    padding-top: 65px; /* Adjust for smaller navbar height */
+  }
+
+  .gallery {
+    gap: 12px;
+  }
+
   .gallery-item {
-    width: 45%;
+    width: calc(50% - 12px); /* replaces 45% to avoid awkward wraps */
   }
 
   .lightbox img {
@@ -391,71 +395,71 @@ a:hover, a:active {
 
 /* --- Footer --- */
 .footer {
-    background-color: #f5dada;
-    text-align: center;
-    padding: 15px;
-    font-size: 14px;
-    color: #555;
-    border-top: 1px solid #ccc;
-    margin-top: 30px;
+  background-color: #f5dada;
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+  color: #555;
+  border-top: 1px solid #ccc;
+  margin-top: 30px;
 }
 
 /* --- Contact Logo --- */
 .contact-logo {
-    height: 80px;
-    width: auto;
-    margin: 10px 0;
+  height: 80px;
+  width: auto;
+  margin: 10px 0;
 }
 
 /* --- Brands Section --- */
 #brands {
-    background-color: #f5dada;
-    padding: 40px 20px;
-    text-align: center;
+  background-color: #f5dada;
+  padding: 40px 20px;
+  text-align: center;
 }
 
 #brands h2 {
-    margin-bottom: 25px;
-    font-size: 28px;
-    color: #000000;
+  margin-bottom: 25px;
+  font-size: 28px;
+  color: #000000;
 }
 
 .brands-logos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
 }
 
 .brands-logos img {
-    max-height: 80px;
-    max-width: 150px;
-    object-fit: contain;
-    filter: grayscale(100%);
-    transition: filter 0.3s ease, transform 0.3s ease;
+  max-height: 80px;
+  max-width: 150px;
+  object-fit: contain;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease, transform 0.3s ease;
 }
 
 .brands-logos img:hover {
-    filter: grayscale(0%);
-    transform: scale(1.05);
+  filter: grayscale(0%);
+  transform: scale(1.05);
 }
 
 @media screen and (max-width: 768px) {
-    .brands-logos img {
-        max-height: 60px;
-        max-width: 120px;
-    }
+  .brands-logos img {
+    max-height: 60px;
+    max-width: 120px;
+  }
 }
 
-/* Lightbox zoom controls */
+/* Lightbox zoom controls — always under the caption */
 .lightbox .controls {
-  position: absolute;
-  left: 50%;
-  bottom: 20px;
-  transform: translateX(-50%);
+  position: static;      /* previously absolute on small screens */
+  transform: none;
   display: flex;
   gap: 8px;
-  z-index: 2001; /* above arrows */
+  z-index: 2001;         /* above arrows if overlapping occurs */
+  margin-top: 6px;
+  justify-content: center;
 }
 
 .lightbox .controls button {
@@ -495,17 +499,6 @@ a:hover, a:active {
 
 /* Make sure caption has space before controls */
 #caption { margin-top: 6px; }
-
-/* On desktop, stack controls under caption (no overlap) */
-@media (min-width: 769px) {
-  .lightbox .controls {
-    position: static;   /* was absolute in some versions */
-    transform: none;
-    bottom: auto;
-    left: auto;
-    margin-top: 6px;
-  }
-}
 
 /* If IntersectionObserver is missing or blocked, don't hide content */
 .no-io section,

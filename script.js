@@ -177,7 +177,8 @@ if (IS_GALLERY_PAGE) {
    Lightbox (shared)
    - Loads FULL category from GALLERY_CONFIG for ANY page
    - Starts on the image that was clicked
-   - Adds zoom controls (auto-injected) + pan
+   - Adds zoom controls + pan
+   - FIX: Do not trigger swipe navigation when panning a zoomed image
    ========================= */
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
@@ -190,13 +191,20 @@ let currentIndex = 0;
 let categoryImages = [];
 let currentGalleryTitle = "";
 
-// --- Zoom state ---
+// --- Zoom/Pan state ---
 let scale = 1, posX = 0, posY = 0;
 const ZOOM_STEP = 0.25;
 const MIN_SCALE = 1;
 const MAX_SCALE = 4;
 
-// Inject zoom toolbar if missing (works on both pages without HTML edits)
+// --- Swipe vs Pan arbitration ---
+let swipeStartX = 0;
+let swipeActive = false;
+let panActive = false;        // true while finger is panning the zoomed image
+let panMoved = false;         // becomes true after a small movement threshold
+const PAN_MOVE_THRESHOLD = 6; // px; distinguish tap from pan
+
+// Inject zoom toolbar if missing
 function ensureZoomControls() {
   if (!lightbox) return;
   if (lightbox.querySelector(".controls")) return;
@@ -226,7 +234,6 @@ function ensureZoomControls() {
 
   controls.append(btnIn, btnOut, btnReset);
 
-  // Insert controls after caption, before arrows (prev/next)
   const captionEl = lightbox.querySelector("#caption");
   if (captionEl && nextBtn) {
     lightbox.insertBefore(controls, nextBtn);
@@ -268,14 +275,12 @@ if (lightbox && lightboxImg && caption && closeBtn && prevBtn && nextBtn) {
     const files = galleries[galleryName] || [];
     if (!cfg || !files.length) return;
 
-    // Build the full list for the lightbox (entire category)
     categoryImages = files.map(file => ({
       src: `${cfg.folder}/${file}`,
       alt: cfg.label
     }));
     currentGalleryTitle = cfg.label;
 
-    // Find index of the clicked file (start here!)
     const clickedSrc = img.getAttribute("src") || "";
     const clickedFile = clickedSrc.split("/").pop();
     const idx = files.indexOf(clickedFile);
@@ -287,11 +292,10 @@ if (lightbox && lightboxImg && caption && closeBtn && prevBtn && nextBtn) {
   function openLightbox() {
     lightbox.style.display = "flex";
     updateLightbox();
-    closeBtn.focus(); // basic focus entry
+    closeBtn.focus();
   }
 
   function updateLightbox() {
-    // reset zoom/pan for each image shown
     resetZoom();
 
     lightboxImg.style.opacity = 0;
@@ -319,14 +323,29 @@ if (lightbox && lightboxImg && caption && closeBtn && prevBtn && nextBtn) {
     if (e.key === "ArrowLeft") changeImage(-1);
   });
 
+  // ---------------------------
   // Swipe (mobile): image navigation
-  let touchStartX = 0;
-  lightbox.addEventListener("touchstart", e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+  //   - Only when NOT zoomed (scale === 1) AND not panning
+  // ---------------------------
+  lightbox.addEventListener("touchstart", e => {
+    if (scale > 1) { swipeActive = false; return; } // disable swipe when zoomed
+    swipeActive = true;
+    swipeStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
   lightbox.addEventListener("touchend", e => {
-    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (!swipeActive || scale > 1 || panActive || panMoved) {
+      // Reset flags and skip swipe navigation if a pan just happened or we're zoomed
+      swipeActive = false;
+      panActive = false;
+      panMoved = false;
+      return;
+    }
+    const dx = e.changedTouches[0].screenX - swipeStartX;
     const SWIPE = 50;
     if (dx < -SWIPE) changeImage(1);
     if (dx >  SWIPE) changeImage(-1);
+    swipeActive = false;
   }, { passive: true });
 
   // --- Zoom controls & pan ---
@@ -374,23 +393,26 @@ if (lightbox && lightboxImg && caption && closeBtn && prevBtn && nextBtn) {
   });
   window.addEventListener("mouseup", () => dragging = false);
 
-  // Touch to pan (single-finger)
-  let touchDrag = false, tLastX = 0, tLastY = 0;
+  // Touch to pan (single-finger) — **no swipe navigation when this is active**
+  let tLastX = 0, tLastY = 0;
   lightboxImg.addEventListener("touchstart", (e) => {
     if (scale === 1) return;
     if (e.touches.length !== 1) return;
-    touchDrag = true;
+    panActive = true;
+    panMoved = false;
     tLastX = e.touches[0].clientX;
     tLastY = e.touches[0].clientY;
   }, { passive: true });
 
   lightboxImg.addEventListener("touchmove", (e) => {
-    if (!touchDrag || scale === 1) return;
-    if (e.touches.length !== 1) return;
+    if (!panActive || scale === 1 || e.touches.length !== 1) return;
     const x = e.touches[0].clientX;
     const y = e.touches[0].clientY;
     const dx = x - tLastX;
     const dy = y - tLastY;
+    if (!panMoved && (Math.abs(dx) > PAN_MOVE_THRESHOLD || Math.abs(dy) > PAN_MOVE_THRESHOLD)) {
+      panMoved = true; // now we know it's a pan, not a tap
+    }
     tLastX = x;
     tLastY = y;
     posX += dx;
@@ -398,7 +420,11 @@ if (lightbox && lightboxImg && caption && closeBtn && prevBtn && nextBtn) {
     applyTransform();
   }, { passive: true });
 
-  lightboxImg.addEventListener("touchend", () => { touchDrag = false; }, { passive: true });
+  lightboxImg.addEventListener("touchend", () => {
+    // Mark pan done; swipe handler on the overlay will see panMoved and skip
+    panActive = false;
+    // keep panMoved true until the overlay touchend runs, then it resets there
+  }, { passive: true });
 
   // Prevent native drag ghost
   lightboxImg.addEventListener("dragstart", (e) => e.preventDefault());
@@ -412,6 +438,7 @@ const navLinks = document.getElementById("nav-links");
 if (hamburger && navLinks) {
   hamburger.setAttribute("aria-label", "Toggle navigation menu");
   hamburger.setAttribute("aria-expanded", "false");
+  hamburger.setAttribute("aria-controls", "nav-links"); // link control for SRs
   hamburger.addEventListener("click", () => {
     const isActive = navLinks.classList.toggle("active");
     hamburger.setAttribute("aria-expanded", String(isActive));
