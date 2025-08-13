@@ -4,15 +4,23 @@
     "bouquets": "Ramos",
     "gifts": "Regalos",
     "ribbons": "Listones",
-    "apparel": "Ropa",
+    "apparel": "Prendas personalizadas",
     "about": "Sobre Nosotros",
     "contact": "Contacto",
     "gallery": "Galería",
     "slogan": "Hecho a mano, inspirado en ti.",
-    "aboutText": "Creamos ramos, regalos, listones y ropa personalizada para cada ocasión.",
+    "aboutText": "Creamos ramos, regalos, cintas y prendas personalizadas hechos a mano, personalizados para cada ocasión. Actualmente realizamos entregas de flores en el condado de Los Ángeles, Orange y San Bernardino. Use nuestra calculadora de envíos para consultar el costo estimado de entrega en su ciudad.",
     "contactEmail": "Correo: frecklescustoms@gmail.com",
     "galleryTitle": "Galería de Fotos",
     "filterAll": "Todo",
     "mailtoCta": "Haz clic aquí para enviarnos un correo",
-    "mailtoCtaLabel": "Envíanos un correo"
+    "mailtoCtaLabel": "Envíanos un correo",
+  "reviewsSection": "Reseñas de clientes",
+  "reviewsTitle": "Lo que dicen nuestros clientes",
+  "reviews": [
+    { "name": "María López",   "rating": 5, "comment": "¡Ramo hermoso y entrega rápida!" },
+    { "name": "Daniel Rivera", "rating": 5, "comment": "Excelente calidad y gran comunicación." },
+    { "name": "Sofía Gómez",   "rating": 4, "comment": "Me encantó el listón personalizado; volveré a comprar." },
+    { "name": "Kevin Torres",  "rating": 5, "comment": "Regalo perfecto, tal como se describió." }
+  ]
 }

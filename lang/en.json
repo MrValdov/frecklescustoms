@@ -9,10 +9,18 @@
     "contact": "Contact",
     "gallery": "Gallery",
     "slogan": "Crafted by Hand, Inspired by You.",
-    "aboutText": "We create handmade bouquets, gifts, ribbons, and apparel customized for every occasion.",
+    "aboutText": "We create handmade bouquets, gifts, ribbons, and apparel customized for every occasion. We currently make flower deliveries in Los Angeles County, Orange County, and San Bernardino County. Use our delivery calculator to check estimated delivery costs to your city.",
     "contactEmail": "Email: frecklescustoms@gmail.com",
     "galleryTitle": "Photo Gallery",
     "filterAll": "All",
     "mailtoCta": "Click here to send us an email",
-    "mailtoCtaLabel": "Send us an email"
+    "mailtoCtaLabel": "Send us an email",
+  "reviewsSection": "Customer Reviews",
+  "reviewsTitle": "What our customers say",
+  "reviews": [
+    { "name": "Maria Lopez",   "rating": 5, "comment": "Beautiful bouquet and fast delivery!" },
+    { "name": "Daniel Rivera", "rating": 5, "comment": "Amazing quality and great communication." },
+    { "name": "Sofia Gomez",   "rating": 4, "comment": "Loved the custom ribbon, will order again." },
+    { "name": "Kevin Torres",  "rating": 5, "comment": "Perfect gift, exactly as described." }
+  ]
 }

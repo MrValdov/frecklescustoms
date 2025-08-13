@@ -47,6 +47,124 @@ const brandsSection = document.getElementById("brands");
 if (brandsSection) brandsSection.addEventListener("contextmenu", e => e.preventDefault());
 
 /* =========================
+   Reviews — i18n-driven marquee (robust)
+   ========================= */
+
+// Utilities
+function getInitials(name = "") {
+  const parts = name.trim().split(/\s+/);
+  if (!parts.length) return "??";
+  const first = parts[0][0] || "";
+  const last  = parts.length > 1 ? parts[parts.length - 1][0] : "";
+  return (first + (last || "")).toUpperCase();
+}
+function getFirstWithInitial(name = "") {
+  const parts = name.trim().split(/\s+/);
+  if (!parts.length) return "";
+  const first = parts[0];
+  const lastInitial = parts.length > 1 ? `${parts[parts.length - 1][0].toUpperCase()}.` : "";
+  return `${first} ${lastInitial}`.trim();
+}
+function buildStars(rating = 0) {
+  const r = Math.max(0, Math.min(5, Math.round(rating)));
+  const span = document.createElement("span");
+  span.className = "review-stars";
+  span.setAttribute("aria-label", `${r} out of 5 stars`);
+  span.textContent = "★★★★★".slice(0, r) + "☆☆☆☆☆".slice(0, 5 - r);
+  return span;
+}
+
+function renderReviewsFromTranslations(translations) {
+  const track = document.getElementById("reviews-track");
+  const marquee = track && track.closest(".reviews-marquee");
+  const section = document.getElementById("reviews");
+  if (!track || !marquee || !section) return;
+
+  track.innerHTML = "";
+  track.style.animationDuration = "";
+  track.style.setProperty("--scroll-end", "");
+
+  const reviews = Array.isArray(translations?.reviews) ? translations.reviews : [];
+  if (!reviews.length) { section.style.display = "none"; return; }
+  section.style.display = "";
+
+  const pass = document.createDocumentFragment();
+  reviews.forEach(r => {
+    const card = document.createElement("article");
+    card.className = "review-card";
+    card.setAttribute("role", "listitem");
+
+    const top = document.createElement("div");
+    top.className = "review-top";
+
+    const avatar = document.createElement("div");
+    avatar.className = "review-avatar";
+    avatar.textContent = getInitials(r.name);
+
+    const name = document.createElement("div");
+    name.className = "review-name";
+    name.textContent = getFirstWithInitial(r.name);
+
+    const stars = buildStars(r.rating);
+
+    const meta = document.createElement("div");
+    meta.append(name, stars);
+
+    const comment = document.createElement("p");
+    comment.className = "review-comment";
+    comment.textContent = r.comment;
+
+    top.append(avatar, meta);
+    card.append(top, comment);
+    pass.append(card);
+  });
+
+  // duplicate a full pass for seamless loop
+  track.append(pass.cloneNode(true));
+  track.append(pass.cloneNode(true));
+
+  requestAnimationFrame(() => {
+    const firstPassChildren = Array.from(track.children).slice(0, reviews.length);
+    const totalWidth = firstPassChildren.reduce((sum, el) => sum + el.getBoundingClientRect().width, 0);
+    const gapPx = parseFloat(getComputedStyle(track).gap) || 0;
+    const passWidth = totalWidth + gapPx * Math.max(0, reviews.length - 1);
+
+    track.style.setProperty("--scroll-end", `-${passWidth}px`);
+
+    const speed = parseFloat(getComputedStyle(marquee).getPropertyValue("--speed")) || 36; // px/s
+    const durationSec = Math.max(6, passWidth / speed);
+    track.style.animationDuration = `${durationSec}s`;
+  });
+}
+
+// Fetch & render for a given lang code
+function fetchAndRenderReviews(lang) {
+  const safe = ["en","es"].includes((lang||"").toLowerCase()) ? lang : "en";
+  fetch(`./lang/${safe}.json`)
+    .then(r => r.ok ? r.json() : {})
+    .then(json => renderReviewsFromTranslations(json))
+    .catch(() => {});
+}
+
+// Initial render (current lang or saved fallback)
+const initialLang = document.documentElement.getAttribute("lang")
+  || localStorage.getItem("lang")
+  || "en";
+fetchAndRenderReviews(initialLang);
+
+// Re-render when <html lang="..."> changes (language switch)
+new MutationObserver(() => {
+  const lang = document.documentElement.getAttribute("lang") || "en";
+  fetchAndRenderReviews(lang);
+}).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+
+// Keep constant speed on resize
+window.addEventListener("resize", () => {
+  const lang = document.documentElement.getAttribute("lang") || "en";
+  fetchAndRenderReviews(lang);
+});
+
+/* =========================
    Page detection & helpers
    ========================= */
 const IS_GALLERY_PAGE = document.body.classList.contains("gallery-page");
@@ -298,13 +416,27 @@ if (lightbox && lightboxImg && caption && closeBtn && prevBtn && nextBtn) {
   function updateLightbox() {
     resetZoom();
 
-    lightboxImg.style.opacity = 0;
-    setTimeout(() => {
-      lightboxImg.src = categoryImages[currentIndex].src;
-      lightboxImg.alt = currentGalleryTitle;
-      caption.innerText = `${currentGalleryTitle} (${currentIndex + 1}/${categoryImages.length})`;
-      lightboxImg.style.opacity = 1;
-    }, 150);
+    (async () => {
+  lightboxImg.style.opacity = 0;
+  const newSrc = categoryImages[currentIndex].src;
+
+  // Preload/decode before swap
+  const tmp = new Image();
+  tmp.src = newSrc;
+  try {
+    if (tmp.decode) {
+      await tmp.decode();
+    } else {
+      await new Promise(res => tmp.complete ? res() : tmp.addEventListener("load", res, { once: true }));
+    }
+  } catch(_) {}
+
+  lightboxImg.src = newSrc;
+  lightboxImg.alt = currentGalleryTitle;
+  caption.innerText = `${currentGalleryTitle} (${currentIndex + 1}/${categoryImages.length})`;
+  requestAnimationFrame(() => { lightboxImg.style.opacity = 1; });
+})();
+
   }
 
   function changeImage(step) {
