@@ -8,14 +8,28 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="gallery-page">
-    <!-- Shipping Banner -->
-    <div class="shipping-banner" role="status" aria-live="polite">
-    <p>
-        <span data-key="shipPart1">We ship most products nationwide, but</span>
-        <strong data-key="shipEmph">flower deliveries</strong>
-        <span data-key="shipPart2">are available only in Los Angeles, Orange, and San Bernardino Counties.</span>
-    </p>
-    </div>
+  <!-- Compact Delivery/Shipping Banner -->
+  <div class="shipping-banner" role="region" aria-label="Delivery and shipping notice">
+    <span data-key="shipNoticeShort">Delivery & Shipping restrictions apply.</span>
+    <a class="banner-link" href="delivery_calculator.html" data-key="deliveryCalc">Delivery</a>
+    <button
+      type="button"
+      class="banner-popover-trigger"
+      aria-expanded="false"
+      aria-controls="ship-popover"
+      data-key="shippingInfo"
+    >Shipping</button>
+
+    <!-- Popover (filled dynamically) -->
+    <span id="ship-popover" class="banner-popover" role="tooltip" hidden></span>
+
+    <!-- Hidden template so i18n fills the long message -->
+    <span class="sr-only ship-template">
+      <span data-key="shipPart1">We ship most products nationwide, but</span>
+      <strong data-key="shipEmph">flower deliveries</strong>
+      <span data-key="shipPart2">are available only in Los Angeles, Orange, and San Bernardino Counties.</span>
+    </span>
+  </div>
   <!-- Navbar -->
   <header class="navbar">
     <div class="logo">

@@ -18,7 +18,9 @@ let galleries = {}; // filename arrays per key
    ========================= */
 const languageButtons = document.querySelectorAll(".language-selector button");
 
-// --- Banner-aware layout (keeps navbar below banner) ---
+/* ---
+   Banner-aware layout (keeps navbar below the banner)
+--- */
 function adjustForBanner() {
   const banner = document.querySelector(".shipping-banner");
   const h = banner ? banner.offsetHeight : 0;
@@ -40,7 +42,7 @@ function loadLanguage(lang) {
       );
       localStorage.setItem("lang", safe);
 
-      // Recalculate banner offset after any text changes (EN/ES)
+      // Recalculate banner offset after any i18n text change
       adjustForBanner();
     })
     .catch(() => {/* fail-closed */});
@@ -59,6 +61,96 @@ window.addEventListener("resize", adjustForBanner);
    ========================= */
 const brandsSection = document.getElementById("brands");
 if (brandsSection) brandsSection.addEventListener("contextmenu", e => e.preventDefault());
+
+/* =========================
+   Shipping popover (floating, dismiss on blur/escape/click-out)
+   - Assumes markup present in banner:
+     .banner-popover-trigger button, #ship-popover, and .ship-template (sr-only)
+   ========================= */
+(() => {
+  const trigger = document.querySelector(".banner-popover-trigger");
+  const pop = document.getElementById("ship-popover");
+  const template = document.querySelector(".ship-template");
+  if (!trigger || !pop || !template) return;
+
+  function buildMessageText() {
+    // The template contains translated [data-key] children already
+    // We read its textContent to produce a compact message
+    return template.textContent.trim();
+  }
+
+  function positionPopover() {
+    const r = trigger.getBoundingClientRect();
+    const margin = 8;
+    // Because popover is position:fixed, viewport coords are correct
+    // Place below trigger; clamp to viewport
+    pop.style.visibility = "hidden";
+    pop.hidden = false; // temporarily unhide to measure width/height
+    const popW = pop.offsetWidth;
+    const left = Math.max(8, Math.min(r.left, window.innerWidth - popW - 8));
+    const top = r.bottom + margin;
+    pop.style.left = `${left}px`;
+    pop.style.top = `${top}px`;
+    pop.style.visibility = "";
+  }
+
+  function openPopover() {
+    pop.textContent = ""; // reset
+    const span = document.createElement("span");
+    span.textContent = buildMessageText();
+    pop.appendChild(span);
+
+    pop.hidden = false;
+    trigger.setAttribute("aria-expanded", "true");
+    positionPopover();
+
+    // Move focus to popover for accessibility if desired:
+    // pop.setAttribute("tabindex", "-1"); pop.focus();
+  }
+
+  function closePopover() {
+    if (pop.hidden) return;
+    pop.hidden = true;
+    trigger.setAttribute("aria-expanded", "false");
+  }
+
+  // Toggle on click
+  trigger.addEventListener("click", (e) => {
+    e.preventDefault();
+    pop.hidden ? openPopover() : closePopover();
+  });
+
+  // Dismiss on outside click
+  document.addEventListener("click", (e) => {
+    if (pop.hidden) return;
+    const within = e.target === pop || pop.contains(e.target) || e.target === trigger;
+    if (!within) closePopover();
+  });
+
+  // Dismiss on Escape
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closePopover();
+  });
+
+  // Dismiss when trigger loses focus and the new focus isn't inside the popover
+  trigger.addEventListener("blur", () => {
+    // Slight delay to allow click inside popover to count as "inside"
+    setTimeout(() => {
+      if (pop.hidden) return;
+      const active = document.activeElement;
+      const stillWithin = active === trigger || pop.contains(active);
+      if (!stillWithin) closePopover();
+    }, 0);
+  });
+
+  // Reposition while visible
+  window.addEventListener("resize", () => { if (!pop.hidden) positionPopover(); });
+  window.addEventListener("scroll",  () => { if (!pop.hidden) positionPopover(); });
+
+  // Keep banner offset correct when the page language changes elsewhere
+  const mo = new MutationObserver(() => adjustForBanner());
+  mo.observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+})();
 
 /* =========================
    Reviews — i18n-driven marquee (robust)
@@ -170,7 +262,7 @@ fetchAndRenderReviews(initialLang);
 new MutationObserver(() => {
   const lang = document.documentElement.getAttribute("lang") || "en";
   fetchAndRenderReviews(lang);
-  // In case the banner text changed due to a lang switch triggered elsewhere
+  // Ensure banner/body offsets are still correct after language switch
   adjustForBanner();
 }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
 
@@ -623,6 +715,7 @@ if (navbar) {
     navbar.classList.toggle("scrolled", window.scrollY > 50);
   });
 }
+
 
 /* =========================
    Delivery Calculator (page-scoped)
