@@ -21,12 +21,32 @@ html {
   scrollbar-gutter: stable overlay; /* ✅ Prevents layout shift & overlap */
 }
 
+/* --- Shipping Banner (fixed at very top) --- */
+.shipping-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #a66; /* brand accent */
+  color: #fff;
+  text-align: center;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 1100; /* above navbar */
+}
+.shipping-banner p {
+  margin: 0;
+  line-height: 1.4;
+}
+
 body {
   user-select: none;
   -webkit-user-drag: none;
   background-color: #f5dada;
   font-family: "Architects Daughter", sans-serif;
-  padding-top: 80px; /* Push content below navbar */
+  /* Push content below banner + navbar (80px desktop / 65px mobile) */
+  padding-top: calc(var(--banner-h, 0px) + 80px);
 }
 
 /* --- Section Layout & Fade-in Animation --- */
@@ -70,10 +90,10 @@ a:hover, a:active {
   text-decoration: underline;
 }
 
-/* --- Fixed Navigation Bar --- */
+/* --- Fixed Navigation Bar (offset by banner height) --- */
 .navbar {
   position: fixed;
-  top: 0;
+  top: var(--banner-h, 0px); /* ⬅️ sits below banner */
   left: 0;
   width: 100%;
   background: #f5dada;
@@ -198,7 +218,7 @@ a:hover, a:active {
 
 #reviews h2 {
   margin-bottom: 16px;
-  font-size: 28px;
+  font-size: 32px;
   color: #000;
 }
 
@@ -437,8 +457,9 @@ a:hover, a:active {
     font-size: 12px;
   }
 
+  /* Adjust for smaller navbar height + banner */
   body {
-    padding-top: 65px; /* Adjust for smaller navbar height */
+    padding-top: calc(var(--banner-h, 0px) + 65px);
   }
 
   .gallery {

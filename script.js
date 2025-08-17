@@ -18,6 +18,13 @@ let galleries = {}; // filename arrays per key
    ========================= */
 const languageButtons = document.querySelectorAll(".language-selector button");
 
+// --- Banner-aware layout (keeps navbar below banner) ---
+function adjustForBanner() {
+  const banner = document.querySelector(".shipping-banner");
+  const h = banner ? banner.offsetHeight : 0;
+  document.documentElement.style.setProperty("--banner-h", `${h}px`);
+}
+
 function loadLanguage(lang) {
   const safe = ["en","es"].includes(lang) ? lang : "en";
   fetch(`./lang/${safe}.json`)
@@ -32,6 +39,9 @@ function loadLanguage(lang) {
         btn.classList.toggle("active", btn.dataset.lang === safe)
       );
       localStorage.setItem("lang", safe);
+
+      // Recalculate banner offset after any text changes (EN/ES)
+      adjustForBanner();
     })
     .catch(() => {/* fail-closed */});
 }
@@ -39,6 +49,10 @@ function loadLanguage(lang) {
 const savedLang = localStorage.getItem("lang") || ((navigator.language||"").toLowerCase().startsWith("es") ? "es" : "en");
 loadLanguage(savedLang);
 languageButtons.forEach(btn => btn.addEventListener("click", () => loadLanguage(btn.dataset.lang)));
+
+// Keep navbar offset correct on load & resize
+window.addEventListener("load", adjustForBanner);
+window.addEventListener("resize", adjustForBanner);
 
 /* =========================
    Optional: block right-click only in Brands section
@@ -156,12 +170,15 @@ fetchAndRenderReviews(initialLang);
 new MutationObserver(() => {
   const lang = document.documentElement.getAttribute("lang") || "en";
   fetchAndRenderReviews(lang);
+  // In case the banner text changed due to a lang switch triggered elsewhere
+  adjustForBanner();
 }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
 
-// Keep constant speed on resize
+// Keep constant speed on resize (and keep banner offset right too)
 window.addEventListener("resize", () => {
   const lang = document.documentElement.getAttribute("lang") || "en";
   fetchAndRenderReviews(lang);
+  adjustForBanner();
 });
 
 /* =========================
@@ -417,26 +434,25 @@ if (lightbox && lightboxImg && caption && closeBtn && prevBtn && nextBtn) {
     resetZoom();
 
     (async () => {
-  lightboxImg.style.opacity = 0;
-  const newSrc = categoryImages[currentIndex].src;
+      lightboxImg.style.opacity = 0;
+      const newSrc = categoryImages[currentIndex].src;
 
-  // Preload/decode before swap
-  const tmp = new Image();
-  tmp.src = newSrc;
-  try {
-    if (tmp.decode) {
-      await tmp.decode();
-    } else {
-      await new Promise(res => tmp.complete ? res() : tmp.addEventListener("load", res, { once: true }));
-    }
-  } catch(_) {}
+      // Preload/decode before swap
+      const tmp = new Image();
+      tmp.src = newSrc;
+      try {
+        if (tmp.decode) {
+          await tmp.decode();
+        } else {
+          await new Promise(res => tmp.complete ? res() : tmp.addEventListener("load", res, { once: true }));
+        }
+      } catch(_) {}
 
-  lightboxImg.src = newSrc;
-  lightboxImg.alt = currentGalleryTitle;
-  caption.innerText = `${currentGalleryTitle} (${currentIndex + 1}/${categoryImages.length})`;
-  requestAnimationFrame(() => { lightboxImg.style.opacity = 1; });
-})();
-
+      lightboxImg.src = newSrc;
+      lightboxImg.alt = currentGalleryTitle;
+      caption.innerText = `${currentGalleryTitle} (${currentIndex + 1}/${categoryImages.length})`;
+      requestAnimationFrame(() => { lightboxImg.style.opacity = 1; });
+    })();
   }
 
   function changeImage(step) {
