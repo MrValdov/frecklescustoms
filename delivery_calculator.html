@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-key="delivery_meta_title">Estimated Delivery Cost • Freckles Customs</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .card { background: #fff; border: 2px solid #a66; border-radius: 16px; padding: 20px; max-width: 720px; margin: 20px auto; text-align: left; }
+    .card h2 { margin-bottom: 10px; color: #000; }
+    .note { color: #555; font-size: 0.9rem; margin-top: 8px; }
+    .result { margin-top: 18px; display: none; border-top: 1px dashed #ccc; padding-top: 16px; }
+    .stat { margin-bottom: 12px; }
+    .stat strong { color: #a66; }
+    .warn { color: #b91c1c; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">
+      <a href="index.html"><img src="./assets/logo.png" alt="Freckles Customs Logo"></a>
+    </div>
+    <nav class="nav-links" id="nav-links">
+      <a href="index.html#home">Home</a>
+      <a href="gallery.html">Gallery</a>
+    </nav>
+    <div class="language-selector">
+      <button data-lang="en">EN</button>
+      <button data-lang="es">ES</button>
+    </div>
+    <div class="hamburger" id="hamburger">&#9776;</div>
+  </header>
+
+  <section class="card">
+    <h2 data-key="delivery_title">Estimated Delivery Cost</h2>
+    <p data-key="delivery_blurb" data-key="delivery_addr_label">From our shop in <strong>Pomona</strong> to your address. First 5 miles are <strong>free</strong>.</p>
+    <form id="calcForm">
+      <label for="dest" data-key="delivery_addr_label">Your delivery address</label>
+      <input id="dest" name="dest" type="search" placeholder="e.g. 123 Main St, Anaheim, CA" data-i18n-attr="placeholder:delivery_addr_placeholder" required style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin:8px 0" />
+      <button type="submit" class="filter-btn" data-key="delivery_calculate">Calculate</button>
+    </form>
+
+    <div id="result" class="result">
+      <div class="stat"><span data-key="delivery_distance_label"></span>Distance: <strong><span id="distanceMi">—</span> miles</strong></div>
+      <div class="stat"><span data-key="delivery_cost_label"></span>Estimated Cost: <strong>$<span id="cost">0.00</span></strong></div>
+      <div id="countyWarn" class="warn" style="display:none" data-key="delivery_area_warning">⚠️ We currently only deliver within Los Angeles, Orange, and San Bernardino counties.</div>
+      <p class="note" data-key="delivery_note">Estimate only. Final price may vary due to routing, traffic, and access.</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2025 Freckles Customs. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

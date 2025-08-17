@@ -623,3 +623,101 @@ if (navbar) {
     navbar.classList.toggle("scrolled", window.scrollY > 50);
   });
 }
+
+/* =========================
+   Delivery Calculator (page-scoped)
+   ========================= */
+(function () {
+  const calcForm = document.getElementById("calcForm");
+  if (!calcForm) return; // not on delivery page
+
+  // Display hint uses “Pomona”; geocoding uses city center
+  const ORIGIN_ADDRESS = "Pomona, CA";
+
+  const $ = (s) => document.querySelector(s);
+  const toRad = (d) => (d * Math.PI) / 180;
+  const dollars = (n) => n.toFixed(2);
+
+  function haversineMiles(a, b) {
+    const R = 3958.7613;
+    const dLat = toRad(b.lat - a.lat);
+    const dLon = toRad(b.lon - a.lon);
+    const lat1 = toRad(a.lat),
+      lat2 = toRad(b.lat);
+    const h =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+    return 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
+  }
+
+  function computeCost(miles) {
+    const billable = Math.max(0, Math.ceil(miles - 5)); // $1 per mile after first 5 (rounded up)
+    return billable * 1;
+  }
+
+  async function geocodeOSM(q) {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&addressdetails=1&q=${encodeURIComponent(
+      q
+    )}`;
+    const r = await fetch(url, { headers: { "Accept-Language": "en" } });
+    if (!r.ok) throw new Error("Geocoding failed");
+    const d = await r.json();
+    if (!d.length) throw new Error("Address not found");
+    const it = d[0];
+    const a = it.address || {};
+    return {
+      lat: +it.lat,
+      lon: +it.lon,
+      address: {
+        county: a.county || a.state_district || "",
+        state: a.state || "",
+        city: a.city || a.town || a.village || a.hamlet || "",
+      },
+    };
+  }
+
+  function isInServiceArea(addr) {
+    if (!addr) return false;
+    const stateOK = (addr.state || "").toLowerCase() === "california";
+    const county = (addr.county || "").toLowerCase();
+    const countyOK = [
+      "los angeles county",
+      "los angeles",
+      "orange county",
+      "orange",
+      "san bernardino county",
+      "san bernardino",
+    ].includes(county);
+    return stateOK && countyOK;
+  }
+
+  async function resolveDistance(dest) {
+    const [origin, target] = await Promise.all([
+      geocodeOSM(ORIGIN_ADDRESS),
+      geocodeOSM(dest),
+    ]);
+    const miles = haversineMiles(origin, target); // straight-line estimate
+    return { miles, destAddress: target.address, inArea: isInServiceArea(target.address) };
+  }
+
+  calcForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const result = $("#result");
+    if (result) result.style.display = "none";
+
+    try {
+      const dest = $("#dest").value.trim();
+      if (!dest) return;
+
+      const { miles, destAddress, inArea } = await resolveDistance(dest);
+      $("#distanceMi").textContent = miles.toFixed(1);
+      $("#cost").textContent = dollars(computeCost(miles));
+      result.style.display = "block";
+
+      const warn = document.getElementById("countyWarn");
+      if (warn) warn.style.display = inArea ? "none" : "block";
+    } catch (err) {
+      alert("Could not locate that address. Please check and try again.");
+    }
+  });
+})();

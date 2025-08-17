@@ -627,3 +627,14 @@ a:hover, a:active {
   opacity: 1 !important;
   transform: none !important;
 }
+
+/* Match calculator controls to site buttons */
+.primary { background: var(--brand, #ef4444); color:#fff; }
+.ghost { background:#fff; color:var(--fg, #111); border:1px solid #e5e7eb; }
+.subtle { background:#f3f4f6; color:var(--fg, #111); }
+
+/* Let inputs feel like the rest of your forms */
+.card input[type="search"] {
+  font-family: inherit;
+  border-radius: 12px;
+}
