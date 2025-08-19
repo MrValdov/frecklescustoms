@@ -744,8 +744,8 @@ if (navbar) {
   }
 
   function computeCost(miles) {
-    const billable = Math.max(0, Math.ceil(miles - 5)); // $1 per mile after first 5 (rounded up)
-    return billable * 1;
+    const billable = Math.max(0, Math.ceil(miles - 5)); // $2 per mile after first 5 (rounded up)
+    return billable * 2;
   }
 
   async function geocodeOSM(q) {

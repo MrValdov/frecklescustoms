@@ -1,0 +1,16 @@
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {
+      "@type":"Question",
+      "name":"How much is flower delivery?",
+      "acceptedAnswer":{"@type":"Answer","text":"The first 5 miles are free; after that it’s $2 per mile from Pomona, CA."}
+    },
+    {
+      "@type":"Question",
+      "name":"What areas do you deliver to?",
+      "acceptedAnswer":{"@type":"Answer","text":"We currently deliver across Los Angeles, Orange, and San Bernardino counties."}
+    }
+  ]
+}

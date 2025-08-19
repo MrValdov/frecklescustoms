@@ -1,9 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self';
+    style-src 'self' https://fonts.googleapis.com;
+    font-src https://fonts.gstatic.com;
+    img-src 'self' data: blob:;
+    object-src 'none';
+    base-uri 'none';
+    frame-ancestors 'none';
+    form-action 'self';
+    upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title data-key="galleryDocTitle">Gallery - Freckles Customs</title>
+
+  <title>Gallery – Custom Bouquets, Ribbons & Gifts | Freckles Customs</title>
+  <meta name="description" content="Browse our handmade flower bouquets, ribbons, and custom gifts. See styles, colors, and past orders for inspiration.">
+  <meta name="robots" content="index,follow">
+
+  <!-- Canonical + hreflang -->
+  <link rel="canonical" href="https://www.frecklescustoms.com/gallery.html">
+  <link rel="alternate" hreflang="en" href="https://www.frecklescustoms.com/gallery.html">
+  <link rel="alternate" hreflang="es" href="https://www.frecklescustoms.com/es/gallery.html">
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Gallery – Custom Bouquets, Ribbons & Gifts">
+  <meta property="og:description" content="Handmade bouquets, ribbons, and gifts. Find your style.">
+  <meta property="og:image" content="https://www.frecklescustoms.com/assets/logo.png">
+  <meta property="og:url" content="https://www.frecklescustoms.com/gallery.html">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- JSON‑LD -->
+  <link rel="alternate" type="application/ld+json" href="/assets/schema/localbusiness.en.json">
+
+  <!-- Favicon + CSS -->
   <link rel="icon" href="./assets/logo.png" type="image/png">
   <link rel="stylesheet" href="style.css" />
 </head>

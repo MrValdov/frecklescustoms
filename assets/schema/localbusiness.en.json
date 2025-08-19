@@ -1,0 +1,20 @@
+{
+  "@context":"https://schema.org",
+  "@type":"LocalBusiness",
+  "name":"Freckles Customs",
+  "image":"https://www.frecklescustoms.com/assets/logo.png",
+  "url":"https://www.frecklescustoms.com/",
+  "priceRange":"$$",
+  "address":{"@type":"PostalAddress","addressLocality":"Pomona","addressRegion":"CA","addressCountry":"US"},
+  "areaServed":[
+    {"@type":"AdministrativeArea","name":"Los Angeles County"},
+    {"@type":"AdministrativeArea","name":"Orange County"},
+    {"@type":"AdministrativeArea","name":"San Bernardino County"}
+  ],
+  "sameAs":[
+    "https://www.instagram.com/frecklescustoms/",
+    "https://www.facebook.com/frecklescustoms/",
+    "https://www.etsy.com/shop/frecklescustoms"
+  ],
+  "inLanguage":"en"
+}

@@ -1,9 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self';
+    style-src 'self' https://fonts.googleapis.com;
+    font-src https://fonts.gstatic.com;
+    img-src 'self' data: blob:;
+    object-src 'none';
+    base-uri 'none';
+    frame-ancestors 'none';
+    form-action 'self';
+    upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title data-key="delivery_meta_title">Estimated Delivery Cost • Freckles Customs</title>
+
+  <title>Delivery Cost Calculator – Flower Delivery from Pomona, CA | Freckles Customs</title>
+  <meta name="description" content="Estimate delivery cost from Pomona, CA. First 5 miles free. Service area: Los Angeles, Orange, and San Bernardino Counties.">
+  <meta name="robots" content="index,follow">
+
+  <!-- Canonical + hreflang -->
+  <link rel="canonical" href="https://www.frecklescustoms.com/delivery_calculator.html">
+  <link rel="alternate" hreflang="en" href="https://www.frecklescustoms.com/delivery_calculator.html">
+  <link rel="alternate" hreflang="es" href="https://www.frecklescustoms.com/es/delivery_calculator.html">
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Delivery Cost Calculator – Flower Delivery from Pomona, CA">
+  <meta property="og:description" content="First 5 miles free. Then $2/mile. Check if your address is in our service area.">
+  <meta property="og:image" content="https://www.frecklescustoms.com/assets/logo.png">
+  <meta property="og:url" content="https://www.frecklescustoms.com/delivery_calculator.html">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- JSON‑LD (LocalBusiness + FAQ as separate files) -->
+  <link rel="alternate" type="application/ld+json" href="/assets/schema/localbusiness.en.json">
+  <link rel="alternate" type="application/ld+json" href="/assets/schema/faq.delivery.en.json">
+
+  <!-- Favicon + CSS -->
+  <link rel="icon" href="./assets/logo.png" type="image/png">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -27,16 +63,16 @@
     <h2 data-key="delivery_title">Estimated Delivery Cost</h2>
     <p data-key="delivery_blurb" data-key="delivery_addr_label">From our shop in <strong>Pomona</strong> to your address. First 5 miles are <strong>free</strong>.</p>
     <form id="calcForm">
-      <label for="dest" data-key="delivery_addr_label">Your delivery address</label>
-      <input id="dest" name="dest" type="search" placeholder="e.g. 123 Main St, Anaheim, CA" data-i18n-attr="placeholder:delivery_addr_placeholder" required style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin:8px 0" />
+      <label for="dest" data-key="delivery_addr_label">Your delivery address</label><br>
+      <input id="dest" name="dest" type="search" placeholder="e.g. 123 Main St, Anaheim, CA" data-i18n-attr="placeholder:delivery_addr_placeholder" required />
       <button type="submit" class="filter-btn" data-key="delivery_calculate">Calculate</button>
     </form>
 
     <div id="result" class="result">
-      <div class="stat"><span data-key="delivery_distance_label"></span>Distance: <strong><span id="distanceMi">—</span> miles</strong></div>
-      <div class="stat"><span data-key="delivery_cost_label"></span>Estimated Cost: <strong>$<span id="cost">0.00</span></strong></div>
+      <div class="stat"><span data-key="delivery_distance_label"></span><!-- >Distance:<--> <strong><span id="distanceMi">—</span> miles</strong></div>
+      <div class="stat"><span data-key="delivery_cost_label"></span><!-- >Estimated Cost:<--> <strong>$<span id="cost">0.00</span></strong></div>
       <div id="countyWarn" class="warn" style="display:none" data-key="delivery_area_warning">⚠️ We currently only deliver within Los Angeles, Orange, and San Bernardino counties.</div>
-      <p class="note" data-key="delivery_note">Estimate only. Final price may vary due to routing, traffic, and access.</p>
+      <p class="note" data-key="delivery_note">Estimate only. Final price may vary due to order size or toll costs.</p>
     </div>
   </section>
 

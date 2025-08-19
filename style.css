@@ -332,15 +332,54 @@ a:hover, a:active { color: rgb(41, 168, 168); text-decoration: underline; }
 /* If IntersectionObserver is missing or blocked, don't hide content */
 .no-io section, .no-io .gallery-item { opacity: 1 !important; transform: none !important; }
 
-/* Optional calculator button styles you had */
-.card { background: #fff; border: 2px solid #a66; border-radius: 16px; padding: 20px; max-width: 720px; margin: 20px auto; text-align: center; }
-.card h2 { margin-bottom: 10px; color: #000; }
-.note { color: #555; font-size: 0.9rem; margin-top: 8px; }
-.result { margin-top: 18px; display: none; border-top: 1px dashed #ccc; padding-top: 16px; }
-.stat { margin-bottom: 12px; }
-.stat strong { color: #a66; }
-.warn { color: #b91c1c; font-weight: bold; }
-.primary { background: var(--brand, #ef4444); color:#fff; }
-.ghost { background:#fff; color:var(--fg, #111); border:1px solid #e5e7eb; }
-.subtle { background:#f3f4f6; color:var(--fg, #111); }
-.card input[type="search"] { font-family: inherit; border-radius: 12px; }
+/* --- Delivery Calculator --- */
+.card {
+  background: #fff;
+  border: 2px solid #a66;
+  border-radius: 16px;
+  padding: 20px;
+  max-width: 720px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.card h2 {
+  margin-bottom: 10px;
+  color: #000;
+}
+
+.card .note {
+  color: #555;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+.card .result {
+  margin-top: 18px;
+  display: none;
+  border-top: 1px dashed #ccc;
+  padding-top: 16px;
+}
+
+.card .stat {
+  margin-bottom: 12px;
+}
+
+.card .stat strong {
+  color: #a66;
+}
+
+.card .warn {
+  color: #b91c1c;
+  font-weight: bold;
+}
+
+.card input[type="search"] {
+  width: 100%;
+  padding: 8px;
+  border-radius: 12px; /* overrides inline 8px */
+  border: 1px solid #ccc;
+  margin: 8px 0;
+  font-family: inherit;
+}
+
