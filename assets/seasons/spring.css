@@ -1,0 +1,78 @@
+#seasons {
+  /* meadow → blossom → light sky */
+  background: linear-gradient(135deg, #7adfb6, #ffd1e8, #d8f3ff);
+  color: #1b3a2f;
+  text-align: center;
+  padding: 60px 20px;
+  border-radius: 20px;
+  position: relative; /* for ::before/::after */
+  overflow: hidden;
+  min-height: 160px;
+  isolation: isolate; /* keeps shadows/filters contained */
+}
+
+/* Content sits above the decorations */
+#seasons .season-content { position: relative; z-index: 1; }
+
+/* Typography (safe here; scoped to banner only) */
+#seasons #season-title {
+  font-family: 'Lobster', cursive;
+  font-size: clamp(28px, 5vw, 42px);
+  line-height: 1.1;
+  color: #123a30;
+}
+#seasons .season-subtitle {
+  margin-top: 10px;
+  font-size: clamp(14px, 2.6vw, 18px);
+  color: #17453a;
+}
+#seasons .season-cta {
+  margin-top: 18px; display: inline-block;
+  background: #ffffff; color: #196b5a;
+  padding: 10px 18px; border-radius: 20px; font-weight: bold; text-decoration: none;
+  border: 2px solid rgba(25, 107, 90, .15);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+}
+#seasons .season-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,.12);
+}
+
+/* Decorative spring icons (emoji = zero assets, CSP-safe) */
+#seasons::before,
+#seasons::after {
+  position: absolute;
+  font-size: 40px;
+  opacity: .45;
+  pointer-events: none;
+  z-index: 0;
+  animation: springFloat 18s ease-in-out infinite;
+  content: "🌸";
+}
+#seasons::before { top: 8%; left: 12%; }
+#seasons::after  { bottom: -6%; right: 16%; content: "🌿"; animation-delay: 5s; }
+
+/* A few drifting petals using layered text-shadows (no extra DOM) */
+#seasons:after {
+  text-shadow:
+    120px -10px 0 rgba(255,255,255,.35),
+    -80px 40px 0 rgba(255,255,255,.35);
+}
+
+/* Gentle vertical drift + tiny rotate */
+@keyframes springFloat {
+  0%   { transform: translateY(14px) rotate(-3deg); }
+  50%  { transform: translateY(-8px) rotate(3deg); }
+  100% { transform: translateY(14px) rotate(-3deg); }
+}
+
+/* Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  #seasons::before, #seasons::after { animation: none !important; }
+}
+
+/* Small screens */
+@media (max-width: 480px) {
+  #seasons { padding: 48px 16px; min-height: 150px; }
+  #seasons::before, #seasons::after { font-size: 32px; }
+}

@@ -814,3 +814,90 @@ if (navbar) {
     }
   });
 })();
+
+/* =========================
+   Seasonal banner auto-loader (EN/ES aware)
+   ========================= */
+(function () {
+  const el = document.getElementById("seasons");
+  if (!el) return;
+
+  // Map months -> season
+  // Jan(0)-Feb(1): winter, Mar(2)-May(4): spring, Jun(5)-Aug(7): summer, Sep(8)-Nov(10): fall, Dec(11): winter
+  function getSeasonForMonth(m) {
+    if (m === 11 || m <= 1) return "winter";          // Dec–Feb
+    if (m >= 2 && m <= 4)  return "spring";           // Mar–May
+    if (m >= 5 && m <= 7)  return "summer";           // Jun–Aug
+    return "fall";                                     // Sep–Nov
+  }
+
+  function currentLang() {
+    // Use your existing <html lang="..."> or saved/local default
+    const attr = document.documentElement.getAttribute("lang");
+    if (attr) return attr.toLowerCase().startsWith("es") ? "es" : "en";
+    const stored = localStorage.getItem("lang");
+    if (stored) return stored;
+    return ((navigator.language || "").toLowerCase().startsWith("es")) ? "es" : "en";
+  }
+
+  async function loadJSON(url) {
+    const r = await fetch(url, { cache: "no-store" });
+    if (!r.ok) throw new Error(`Fetch failed: ${url}`);
+    return r.json();
+  }
+
+  function injectCSS(href) {
+    return new Promise((resolve, reject) => {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = href;
+      link.onload = () => resolve();
+      link.onerror = () => reject(new Error("CSS load error: " + href));
+      document.head.appendChild(link);
+    });
+  }
+
+  async function loadSeasonAuto() {
+    const season = getSeasonForMonth(new Date().getMonth());
+    const lang = currentLang();
+
+    // 1) Load season CSS
+    try {
+      await injectCSS(`./assets/seasons/${season}.css`);
+    } catch (_) {
+      // Optional: silently ignore if missing
+    }
+
+    // 2) Load localized copy (fall-es.json -> fall-en.json)
+    let data = null;
+    const localized = `./assets/seasons/${season}-${lang}.json`;
+    const fallback  = `./assets/seasons/${season}-en.json`;
+    try {
+      data = await loadJSON(localized);
+    } catch (e1) {
+      try { data = await loadJSON(fallback); } catch (e2) {}
+    }
+    if (!data) return; // nothing to show
+
+    const titleEl = el.querySelector("#season-title");
+    const subEl   = el.querySelector(".season-subtitle");
+    const ctaEl   = el.querySelector(".season-cta");
+
+    if (titleEl) titleEl.textContent = data.title || "";
+    if (subEl)   subEl.textContent   = data.subtitle || "";
+    if (ctaEl) {
+      ctaEl.textContent = data.cta || "";
+      ctaEl.href = data.link || "#";
+    }
+  }
+
+  // Initial load
+  loadSeasonAuto();
+
+  // Re-load copy if the site language changes at runtime (your language switcher updates <html lang>)
+  new MutationObserver(() => loadSeasonAuto())
+    .observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+})();
+/* =====================
+    Seasons manager ends here
+   =====================*/

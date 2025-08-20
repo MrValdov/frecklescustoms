@@ -1,0 +1,38 @@
+#seasons {
+  background: linear-gradient(135deg, #b94e2e, #d97706, #f59e0b);
+  color: #fff;
+  text-align: center;
+  padding: 60px 20px;
+  border-radius: 20px;
+  position: relative; /* required for ::before/::after positioning */
+  overflow: hidden;
+  min-height: 160px; /* ensures the banner has visible height even with empty copy */
+}
+
+/* Content above leaves */
+#seasons .season-content { position: relative; z-index: 1; }
+
+/* Falling leaves */
+#seasons::before,
+#seasons::after {
+  content: "🍂";
+  position: absolute;
+  font-size: 40px;
+  animation: fall 12s linear infinite;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+#seasons::before { top: -10%; left: 20%; }
+#seasons::after  { top: -5%; right: 25%; animation-delay: 6s; }
+
+/* Animation */
+@keyframes fall {
+  0%   { transform: translateY(0) rotate(0); }
+  100% { transform: translateY(300px) rotate(360deg); }
+}
+
+/* If user has Reduced Motion on, just show static leaves */
+@media (prefers-reduced-motion: reduce) {
+  #seasons::before, #seasons::after { animation: none; }
+}

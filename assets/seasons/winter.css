@@ -1,0 +1,74 @@
+#seasons {
+  /* deep ice → frosty sky → pale sun */
+  background: linear-gradient(135deg, #0f3d5e, #4fa3d1, #e6f0ff);
+  color: #fff;
+  text-align: center;
+  padding: 60px 20px;
+  border-radius: 20px;
+  position: relative; /* for ::before/::after */
+  overflow: hidden;
+  min-height: 160px;
+  isolation: isolate; /* keeps effects contained */
+}
+
+/* Content sits above the decorations if you already have .season-content */
+#seasons .season-content { position: relative; z-index: 1; }
+
+/* Typography (scoped to banner only) */
+#seasons #season-title {
+  font-family: 'Lobster', cursive;
+  font-size: clamp(28px, 5vw, 42px);
+  line-height: 1.1;
+  text-shadow: 0 2px 10px rgba(0,0,0,.18);
+}
+#seasons .season-subtitle {
+  margin-top: 10px;
+  font-size: clamp(14px, 2.6vw, 18px);
+  opacity: .95;
+}
+#seasons .season-cta {
+  margin-top: 18px; display: inline-block;
+  background: #ffffff; color: #0f3d5e;
+  padding: 10px 18px; border-radius: 20px; font-weight: bold; text-decoration: none;
+  border: 2px solid rgba(255,255,255,.85);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+}
+#seasons .season-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,.15);
+}
+
+/* Decorative winter icons (emoji = zero assets, CSP-safe) */
+#seasons::before,
+#seasons::after {
+  position: absolute;
+  font-size: 40px;
+  opacity: .45;
+  pointer-events: none;
+  z-index: 0;
+  animation: winterDrift 18s ease-in-out infinite;
+  content: "❄️";
+}
+#seasons::before { top: 6%; left: 12%; }
+#seasons::after  { bottom: -6%; right: 16%; content: "⛄"; animation-delay: 5s; }
+
+/* Subtle snow sparkle layer (no extra markup) */
+#seasons::marker { /* no-op to avoid invalid selector warnings */ }
+
+/* Gentle drift */
+@keyframes winterDrift {
+  0%   { transform: translateY(16px) rotate(0deg); }
+  50%  { transform: translateY(-10px) rotate(-6deg); }
+  100% { transform: translateY(16px) rotate(0deg); }
+}
+
+/* Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  #seasons::before, #seasons::after { animation: none !important; }
+}
+
+/* Small screens */
+@media (max-width: 480px) {
+  #seasons { padding: 48px 16px; min-height: 150px; }
+  #seasons::before, #seasons::after { font-size: 32px; }
+}

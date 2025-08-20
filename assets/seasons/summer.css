@@ -1,0 +1,66 @@
+#seasons {
+  /* ocean → sky → sun */
+  background: linear-gradient(135deg, #22c1c3, #64d9ff, #fdbb2d);
+  color: #fff;
+  text-align: center;
+  padding: 60px 20px;
+  border-radius: 20px;
+  position: relative; /* for ::before/::after */
+  overflow: hidden;
+  min-height: 160px;
+  isolation: isolate; /* keeps shadows/filters contained */
+}
+
+/* Content sits above the decorations if you already have .season-content */
+#seasons .season-content { position: relative; z-index: 1; }
+
+/* Typography (safe to include here; scoped to banner only) */
+#seasons #season-title {
+  font-family: 'Lobster', cursive;
+  font-size: clamp(28px, 5vw, 42px);
+  line-height: 1.1;
+}
+#seasons .season-subtitle { margin-top: 10px; font-size: clamp(14px, 2.6vw, 18px); }
+#seasons .season-cta {
+  margin-top: 18px; display: inline-block;
+  background: #fff; color: #0f5c6a;
+  padding: 10px 18px; border-radius: 20px; font-weight: bold; text-decoration: none;
+  border: 2px solid rgba(255,255,255,.8);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+}
+#seasons .season-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,.15); }
+
+/* Decorative summer icons (emoji = zero assets, CSP-safe) */
+#seasons::before,
+#seasons::after {
+  position: absolute;
+  font-size: 40px;
+  opacity: .45;
+  pointer-events: none;
+  z-index: 0;
+  animation: summerFloat 16s ease-in-out infinite;
+  content: "☀️";
+}
+#seasons::before { top: 6%; left: 16%; }
+#seasons::after  { bottom: -8%; right: 18%; content: "🌴"; animation-delay: 4s; }
+
+/* Optional third layer without touching markup: draw using shadow text */
+#seasons:has(.season-content)::marker { /* no-op to avoid invalid selector warnings */ }
+
+/* Gentle vertical drift + tiny rotate */
+@keyframes summerFloat {
+  0%   { transform: translateY(18px) rotate(0deg); }
+  50%  { transform: translateY(-10px) rotate(6deg); }
+  100% { transform: translateY(18px) rotate(0deg); }
+}
+
+/* Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  #seasons::before, #seasons::after { animation: none !important; }
+}
+
+/* Small screens */
+@media (max-width: 480px) {
+  #seasons { padding: 48px 16px; min-height: 150px; }
+  #seasons::before, #seasons::after { font-size: 32px; }
+}
