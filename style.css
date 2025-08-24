@@ -209,11 +209,22 @@ a:hover, a:active { color: rgb(41, 168, 168); text-decoration: underline; }
   display: flex; flex-wrap: wrap; justify-content: center;
   gap: 15px; max-width: 90%; margin-top: 20px;
 }
+/* always apply size + transitions everywhere */
 .gallery-item {
-  width: 180px; opacity: 0; transform: translateY(20px);
+  width: 180px;
   transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.4s ease;
 }
-.gallery-item.visible { opacity: 1; transform: translateY(0); }
+
+/* only hide/animate-in on the actual gallery page */
+.gallery-page .gallery-item {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.gallery-page .gallery-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .gallery-item:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.2); opacity: 0.95; }
 .gallery-item img { width: 100%; height: auto; cursor: pointer; display: block; border-radius: 4px; }
 .desc { padding: 10px; font-size: 14px; text-align: center; }

@@ -4,7 +4,7 @@
    One source of truth for galleries
    ========================================= */
 const GALLERY_CONFIG = {
-  mariana:  { folder: "./assets/mariana",  prefix: "mariana_",  count: 70, label: "Mariana's Collection", className: "bouquets", pad: 3 },
+  mariana:  { folder: "./assets/mariana",  prefix: "mariana_",  count: 143, label: "Mariana's Collection", className: "bouquets", pad: 3 },
   fiorella: { folder: "./assets/fiorella", prefix: "fiorella_", count: 16, label: "Fiorella's Gifts",     className: "gifts",    pad: 3 },
   shinny:   { folder: "./assets/shinny",   prefix: "shinny_",   count: 20, label: "Shinny Ribbons",       className: "ribbons",  pad: 3 },
   alvin:    { folder: "./assets/alvin",    prefix: "alvin_",    count: 8,  label: "Alvin's Apparel",      className: "apparel",  pad: 3 },
@@ -277,15 +277,28 @@ window.addEventListener("resize", () => {
    Page detection & helpers
    ========================= */
 const IS_GALLERY_PAGE = document.body.classList.contains("gallery-page");
+if (IS_GALLERY_PAGE) {
+  // Apply filter from URL if present, e.g. gallery.html?filter=gifts
+  const params = new URLSearchParams(window.location.search);
+  const initialFilter = params.get("filter");
+  if (initialFilter) {
+    const btn = document.querySelector(`.filter-btn[data-filter="${initialFilter}"]`);
+    if (btn) btn.click();
+  }
+
+  // Keep the fade‑in you already have
+  document.querySelectorAll('.brand-header, #gallery-page')
+    .forEach(s => s.classList.add('visible'));
+}
 
 if (IS_GALLERY_PAGE) {
   document.querySelectorAll('.brand-header, #gallery-page')
     .forEach(s => s.classList.add('visible'));
 }
 
-function buildNames(prefix, count, pad = 0, start = 1) {
+function buildBases(prefix, count, pad = 0, start = 1) {
   return Array.from({ length: count }, (_, i) =>
-    `${prefix}${String(i + start).padStart(pad, "0")}.jpg`
+    `${prefix}${String(i + start).padStart(pad, "0")}`
   );
 }
 
@@ -342,7 +355,7 @@ window.addEventListener('load', () => {
    Build the galleries map from config (both pages)
    ========================= */
 galleries = Object.fromEntries(
-  Object.entries(GALLERY_CONFIG).map(([key, cfg]) => [key, buildNames(cfg.prefix, cfg.count, cfg.pad)])
+  Object.entries(GALLERY_CONFIG).map(([key, cfg]) => [key, buildBases(cfg.prefix, cfg.count, cfg.pad)])
 );
 
 /* =========================
@@ -353,14 +366,14 @@ if (IS_GALLERY_PAGE) {
   if (container) {
     const frag = document.createDocumentFragment();
     for (const [key, cfg] of Object.entries(GALLERY_CONFIG)) {
-      const files = galleries[key];
-      files.forEach(file => {
+      const bases = galleries[key];
+      bases.forEach(base => {
         const item = document.createElement("div");
         item.className = `gallery-item ${cfg.className}`;
 
         const img = document.createElement("img");
         img.loading = "lazy";
-        img.src = `${cfg.folder}/${file}`;
+        img.src = `${cfg.folder}/thumbnails/${base}.webp`;
         img.alt = cfg.label;
         img.dataset.gallery = key;
 
@@ -382,23 +395,34 @@ if (IS_GALLERY_PAGE) {
     const filterButtons = document.querySelectorAll(".filter-btn");
     if (filterButtons.length) {
       const itemsAll = () => container.querySelectorAll(".gallery-item");
-      filterButtons.forEach(btn => {
-        btn.addEventListener("click", () => {
-          filterButtons.forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-          const category = btn.dataset.filter;
-          itemsAll().forEach(item => {
-            item.style.display =
-              category === "all" || item.classList.contains(category) ? "block" : "none";
-          });
+
+      // Reusable filter applier
+      function applyFilter(category) {
+        filterButtons.forEach(b => b.classList.toggle("active", b.dataset.filter === category));
+        itemsAll().forEach(item => {
+          item.style.display = (category === "all" || item.classList.contains(category)) ? "block" : "none";
         });
+      }
+
+      // Click handlers
+      filterButtons.forEach(btn => {
+        btn.addEventListener("click", () => applyFilter(btn.dataset.filter));
       });
+
+      // Apply initial filter from URL AFTER handlers are ready
+      const initial = new URLSearchParams(window.location.search).get("filter");
+      const hasBtn = initial && document.querySelector(`.filter-btn[data-filter="${initial}"]`);
+      if (hasBtn) {
+        applyFilter(initial);
+        // Optional: clean the URL so refresh keeps current view without ?filter
+        // history.replaceState(null, "", location.pathname);
+      } else {
+        applyFilter("all");
+      }
     }
   }
-} else {
-  // Index/other pages already have a few teaser thumbnails in HTML; just animate them
-  document.querySelectorAll(".gallery").forEach(gal => observeNewGalleryItems(gal));
 }
+
 
 /* =========================
    Lightbox (shared)
@@ -499,18 +523,18 @@ if (lightbox && lightboxImg && caption && closeBtn && prevBtn && nextBtn) {
 
     const galleryName = img.dataset.gallery;
     const cfg = GALLERY_CONFIG[galleryName];
-    const files = galleries[galleryName] || [];
-    if (!cfg || !files.length) return;
+    const bases = galleries[galleryName] || [];
+    if (!cfg || !bases.length) return;
 
-    categoryImages = files.map(file => ({
-      src: `${cfg.folder}/${file}`,
+    categoryImages = bases.map(base => ({
+      src: `${cfg.folder}/${base}.jpg`,
       alt: cfg.label
     }));
     currentGalleryTitle = cfg.label;
 
     const clickedSrc = img.getAttribute("src") || "";
-    const clickedFile = clickedSrc.split("/").pop();
-    const idx = files.indexOf(clickedFile);
+    const clickedBase = clickedSrc.split("/").pop().replace(/\.(webp|jpg)$/i, "");
+    const idx = bases.indexOf(clickedBase);
     currentIndex = idx >= 0 ? idx : 0;
 
     openLightbox();
