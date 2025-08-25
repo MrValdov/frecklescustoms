@@ -394,6 +394,16 @@ a:hover, a:active { color: rgb(41, 168, 168); text-decoration: underline; }
   font-family: inherit;
 }
 
+.card select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  margin: 8px 0;
+  font-family: inherit;
+  background: #fff;
+}
+
 /* =====================
     Changes every season
    =====================*/

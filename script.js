@@ -4,11 +4,11 @@
    One source of truth for galleries
    ========================================= */
 const GALLERY_CONFIG = {
-  mariana:  { folder: "./assets/mariana",  prefix: "mariana_",  count: 143, label: "Mariana's Collection", className: "bouquets", pad: 3 },
-  fiorella: { folder: "./assets/fiorella", prefix: "fiorella_", count: 16, label: "Fiorella's Gifts",     className: "gifts",    pad: 3 },
-  shinny:   { folder: "./assets/shinny",   prefix: "shinny_",   count: 20, label: "Shinny Ribbons",       className: "ribbons",  pad: 3 },
-  alvin:    { folder: "./assets/alvin",    prefix: "alvin_",    count: 8,  label: "Alvin's Apparel",      className: "apparel",  pad: 3 },
-  cool:     { folder: "./assets/cool",     prefix: "cool_",     count: 1,  label: "Cool Vinyls",          className: "gifts",    pad: 3 }
+  mariana:  { folder: "./assets/mariana",  prefix: "mariana_",  count: 156, label: "Mariana's Collection", className: "bouquets", pad: 3 },
+  fiorella: { folder: "./assets/fiorella", prefix: "fiorella_", count: 18, label: "Fiorella's Gifts",     className: "gifts",    pad: 3 },
+  shinny:   { folder: "./assets/shinny",   prefix: "shinny_",   count: 25, label: "Shinny Ribbons",       className: "ribbons",  pad: 3 },
+  alvin:    { folder: "./assets/alvin",    prefix: "alvin_",    count: 11,  label: "Alvin's Apparel",      className: "apparel",  pad: 3 },
+  cool:     { folder: "./assets/cool",     prefix: "cool_",     count: 7,  label: "Cool Vinyls",          className: "cool",    pad: 3 }
 };
 
 let galleries = {}; // filename arrays per key
@@ -768,8 +768,9 @@ if (navbar) {
   }
 
   function computeCost(miles) {
-    const billable = Math.max(0, Math.ceil(miles - 5)); // $2 per mile after first 5 (rounded up)
-    return billable * 2;
+    const billable = Math.max(0, Math.ceil(miles)); // $2 per mile (rounded up)
+    const rawCost = billable * 2;
+    return rawCost > 0 && rawCost < 10 ? 10 : rawCost; // enforce $10 minimum if >0
   }
 
   async function geocodeOSM(q) {
@@ -818,25 +819,51 @@ if (navbar) {
   }
 
   calcForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const result = $("#result");
-    if (result) result.style.display = "none";
+  e.preventDefault();
+  const result = $("#result");
+  if (result) result.style.display = "none";
 
-    try {
-      const dest = $("#dest").value.trim();
-      if (!dest) return;
+  try {
+    const dest = $("#dest").value.trim();
+    if (!dest) return;
 
-      const { miles, destAddress, inArea } = await resolveDistance(dest);
-      $("#distanceMi").textContent = miles.toFixed(1);
-      $("#cost").textContent = dollars(computeCost(miles));
-      result.style.display = "block";
+    const { miles, destAddress, inArea } = await resolveDistance(dest);
 
-      const warn = document.getElementById("countyWarn");
-      if (warn) warn.style.display = inArea ? "none" : "block";
-    } catch (err) {
-      alert("Could not locate that address. Please check and try again.");
+    // base delivery math (you already have first 5 miles free in computeCost)
+    const baseCost = computeCost(miles);
+
+    // read the listbox value
+    const bracket = ($("#orderBracket")?.value) || "lt150";
+
+    // adjust per your rules
+    let finalCost = baseCost;
+    let note = "";
+
+    if (bracket === "151_250") {
+      finalCost = baseCost / 2;
+      note = "Half delivery fee applied for $151–$250 orders.";
+    } else if (bracket === "gt251") {
+      finalCost = 0;
+      note = "Free delivery applied for orders $251+.";
+    } // lt150 => no change
+
+    // update UI
+    $("#distanceMi").textContent = miles.toFixed(1);
+    $("#cost").textContent = finalCost.toFixed(2);
+    result.style.display = "block";
+
+    const warn = document.getElementById("countyWarn");
+    if (warn) warn.style.display = inArea ? "none" : "block";
+
+    const dn = document.getElementById("discountNote");
+    if (dn) {
+      if (note) { dn.textContent = note; dn.style.display = "block"; }
+      else { dn.textContent = ""; dn.style.display = "none"; }
     }
-  });
+  } catch (err) {
+    alert("Could not locate that address. Please check and try again.");
+  }
+});
 })();
 
 /* =========================

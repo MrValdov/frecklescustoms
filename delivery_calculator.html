@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Delivery Cost Calculator – Flower Delivery from Pomona, CA | Freckles Customs</title>
-  <meta name="description" content="Estimate delivery cost from Pomona, CA. First 5 miles free. Service area: Los Angeles, Orange, and San Bernardino Counties.">
+  <meta name="description" content="Estimate delivery cost from Pomona, CA. Free delivery subject to order size. Service area: Los Angeles, Orange, and San Bernardino Counties.">
   <meta name="robots" content="index,follow">
 
   <!-- Canonical + hreflang -->
@@ -30,7 +30,7 @@
   <!-- Open Graph / Twitter -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Delivery Cost Calculator – Flower Delivery from Pomona, CA">
-  <meta property="og:description" content="First 5 miles free. Then $2/mile. Check if your address is in our service area.">
+  <meta property="og:description" content="Free delivery subject to order size. Check if your address is in our service area.">
   <meta property="og:image" content="https://www.frecklescustoms.com/assets/logo.png">
   <meta property="og:url" content="https://www.frecklescustoms.com/delivery_calculator.html">
   <meta name="twitter:card" content="summary_large_image">
@@ -66,6 +66,14 @@
     <form id="calcForm">
       <label for="dest" data-key="delivery_addr_label">Your delivery address</label><br>
       <input id="dest" name="dest" type="search" placeholder="e.g. 123 Main St, Anaheim, CA" data-i18n-attr="placeholder:delivery_addr_placeholder" required />
+      <div class="order-total">
+        <label for="orderBracket" data-key="delivery_order_label">Order total</label><br>
+        <select id="orderBracket" name="orderBracket" required>
+          <option value="lt150" data-key="delivery_order_lt150">Less than $150</option>
+          <option value="151_250" data-key="delivery_order_151_250">$151–$250 (half delivery fee)</option>
+          <option value="gt251" data-key="delivery_order_gt251">$251+ (free delivery)</option>
+        </select>
+      </div>
       <button type="submit" class="filter-btn" data-key="delivery_calculate">Calculate</button>
     </form>
 
@@ -73,6 +81,7 @@
       <div class="stat"><span data-key="delivery_distance_label"></span><!-- >Distance:<--> <strong><span id="distanceMi">—</span> miles</strong></div>
       <div class="stat"><span data-key="delivery_cost_label"></span><!-- >Estimated Cost:<--> <strong>$<span id="cost">0.00</span></strong></div>
       <div id="countyWarn" class="warn" style="display:none" data-key="delivery_area_warning">⚠️ We currently only deliver within Los Angeles, Orange, and San Bernardino counties.</div>
+      <p id="discountNote" class="note" style="display:none"></p>
       <p class="note" data-key="delivery_note">Estimate only. Final price may vary due to order size or toll costs.</p>
     </div>
   </section>
