@@ -4,11 +4,11 @@
    One source of truth for galleries
    ========================================= */
 const GALLERY_CONFIG = {
-  mariana:  { folder: "./assets/mariana",  prefix: "mariana_",  count: 156, label: "Mariana's Collection", className: "bouquets", pad: 3 },
+  mariana:  { folder: "./assets/mariana",  prefix: "mariana_",  count: 163, label: "Mariana's Collection", className: "bouquets", pad: 3 },
   fiorella: { folder: "./assets/fiorella", prefix: "fiorella_", count: 18, label: "Fiorella's Gifts",     className: "gifts",    pad: 3 },
-  shinny:   { folder: "./assets/shinny",   prefix: "shinny_",   count: 25, label: "Shinny Ribbons",       className: "ribbons",  pad: 3 },
+  shinny:   { folder: "./assets/shinny",   prefix: "shinny_",   count: 26, label: "Shinny Ribbons",       className: "ribbons",  pad: 3 },
   alvin:    { folder: "./assets/alvin",    prefix: "alvin_",    count: 11,  label: "Alvin's Apparel",      className: "apparel",  pad: 3 },
-  cool:     { folder: "./assets/cool",     prefix: "cool_",     count: 7,  label: "Cool Vinyls",          className: "cool",    pad: 3 }
+  cool:     { folder: "./assets/cool",     prefix: "cool_",     count: 9,  label: "Cool Vinyls",          className: "cool",    pad: 3 }
 };
 
 let galleries = {}; // filename arrays per key
