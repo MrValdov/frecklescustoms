@@ -5,7 +5,7 @@
     default-src 'self';
     script-src 'self';
     style-src 'self' https://fonts.googleapis.com;
-    font-src https://fonts.gstatic.com;
+    font-src 'self' https://fonts.gstatic.com;
     img-src 'self' data: blob:;
     object-src 'none';
     base-uri 'none';
@@ -70,10 +70,10 @@
             <img src="./assets/logo.png" alt="Freckles Customs Logo">
         </div>
         <nav class="nav-links" id="nav-links" role="navigation" aria-label="Main navigation">
-            <!--a href="#bouquets" data-key="bouquets">Bouquets</-a>
+            <!--a href="#bouquets" data-key="bouquets">Bouquets</a>
             <a href="#gifts" data-key="gifts">Gifts</a>
             <a href="#ribbons" data-key="ribbons">Ribbons</a>
-            <a-- href="#apparel" data-key="apparel">Apparel</a-->
+            <a href="#apparel" data-key="apparel">Apparel</a-->
             <a href="#about" data-key="about">About Us</a>
             <a href="#contact" data-key="contact">Contact</a>
             <a href="gallery.html" data-key="gallery">Gallery</a>
@@ -103,7 +103,7 @@
   <div class="season-content">
     <h2 id="season-title"></h2>
     <p class="season-subtitle"></p>
-    <!--a href="#" class="season-cta"></!--a-->
+    <!-- <a href="#" class="season-cta"></a> -->
   </div>
 </section>
 
@@ -115,6 +115,7 @@
         <a href="gallery.html?filter=apparel"><img src="./assets/brands/alvins_apparel.png" alt="Alvin's Apparel"></a>
         <a href="gallery.html?filter=cool"><img src="./assets/brands/cool_vinyls.png" alt="Cool Vinyls"></a>
         <a href="gallery.html?filter=gifts"><img src="./assets/brands/fiorella_gifts.png" alt="Fiorella Gifts"></a>
+        <a href="gallery.html?filter=ourhome"><img src="./assets/brands/our_home.png" alt="Our Home"></a>
         <a href="gallery.html?filter=bouquets"><img src="./assets/brands/mariana_collect.png" alt="Mariana's Collection"></a>
         <a href="gallery.html?filter=ribbons"><img src="./assets/brands/shinny_ribbons.png" alt="Shinny Ribbons"></a>
         <a href="gallery.html?filter=gifts"><img src="./assets/brands/valeries_stickers.png" alt="Valerie's Stickers"></a>
@@ -130,16 +131,31 @@
   </div>
 </section>
 
+    <!-- Home Section -->
+    <section id="ourhome" aria-labelledby="ourhome-title">
+        <h2 id="ourhome-title" data-key="ourhome">Home Decor</h2>
+        <div class="gallery">
+            <div class="gallery-item ourhome">
+                <img src="./assets/home/thumbnails/home_2.webp" alt="Home Decor Collection" data-gallery="ourhome">
+                <div class="desc">Our Home</div>
+            </div>
+            <div class="gallery-item ourhome">
+                <img src="./assets/home/thumbnails/home_1.webp" alt="Home Decor Collection" data-gallery="ourhome">
+                <div class="desc">Our Home</div>
+            </div>
+        </div>
+    </section>
+    
     <!-- Bouquets Section -->
     <section id="bouquets" aria-labelledby="bouquets-title">
         <h2 id="bouquets-title" data-key="bouquets">Bouquets</h2>
         <div class="gallery">
             <div class="gallery-item bouquets">
-                <img src="./assets/mariana/thumbnails/mariana_001.webp" alt="Bouquet from Mariana's Collection" data-gallery="mariana">
+                <img src="./assets/mariana/thumbnails/mariana_1.webp" alt="Bouquet from Mariana's Collection" data-gallery="mariana">
                 <div class="desc">Mariana's Collection</div>
             </div>
             <div class="gallery-item bouquets">
-                <img src="./assets/mariana/thumbnails/mariana_002.webp" alt="Bouquet from Mariana's Collection" data-gallery="mariana">
+                <img src="./assets/mariana/thumbnails/mariana_2.webp" alt="Bouquet from Mariana's Collection" data-gallery="mariana">
                 <div class="desc">Mariana's Collection</div>
             </div>
         </div>
@@ -150,11 +166,11 @@
         <h2 id="gifts-title" data-key="gifts">Gifts</h2>
         <div class="gallery">
             <div class="gallery-item">
-                <img src="./assets/fiorella/thumbnails/fiorella_011.webp" alt="Gift from Fiorella's Collection" data-gallery="fiorella">
+                <img src="./assets/fiorella/thumbnails/fiorella_11.webp" alt="Gift from Fiorella's Collection" data-gallery="fiorella">
                 <div class="desc">Fiorella's Gifts</div>
             </div>
             <div class="gallery-item">
-                <img src="./assets/fiorella/thumbnails/fiorella_016.webp" alt="Gift from Fiorella's Collection" data-gallery="fiorella">
+                <img src="./assets/fiorella/thumbnails/fiorella_13.webp" alt="Gift from Fiorella's Collection" data-gallery="fiorella">
                 <div class="desc">Fiorella's Gifts</div>
             </div>
         </div>
@@ -165,11 +181,11 @@
         <h2 id="ribbons-title" data-key="ribbons">Ribbons</h2>
         <div class="gallery">
             <div class="gallery-item">
-                <img src="./assets/shinny/thumbnails/shinny_010.webp" alt="Ribbon from Shinny Collection" data-gallery="shinny">
+                <img src="./assets/shinny/thumbnails/shinny_10.webp" alt="Ribbon from Shinny Collection" data-gallery="shinny">
                 <div class="desc">Shinny Ribbons</div>
             </div>
             <div class="gallery-item">
-                <img src="./assets/shinny/thumbnails/shinny_026.webp" alt="Ribbon from Shinny Collection" data-gallery="shinny">
+                <img src="./assets/shinny/thumbnails/shinny_18.webp" alt="Ribbon from Shinny Collection" data-gallery="shinny">
                 <div class="desc">Shinny Ribbons</div>
             </div>
         </div>
@@ -180,11 +196,11 @@
         <h2 id="apparel-title" data-key="apparel">Apparel</h2>
         <div class="gallery">
             <div class="gallery-item">
-                <img src="./assets/alvin/thumbnails/alvin_002.webp" alt="Apparel from Alvin's Collection" data-gallery="alvin">
+                <img src="./assets/alvin/thumbnails/alvin_2.webp" alt="Apparel from Alvin's Collection" data-gallery="alvin">
                 <div class="desc">Alvin's Apparel</div>
             </div>
             <div class="gallery-item">
-                <img src="./assets/alvin/thumbnails/alvin_003.webp" alt="Apparel from Alvin's Collection" data-gallery="alvin">
+                <img src="./assets/alvin/thumbnails/alvin_3.webp" alt="Apparel from Alvin's Collection" data-gallery="alvin">
                 <div class="desc">Alvin's Apparel</div>
             </div>
         </div>

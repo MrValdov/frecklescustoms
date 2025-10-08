@@ -4,11 +4,12 @@
    One source of truth for galleries
    ========================================= */
 const GALLERY_CONFIG = {
-  mariana:  { folder: "./assets/mariana",  prefix: "mariana_",  count: 163, label: "Mariana's Collection", className: "bouquets", pad: 3 },
-  fiorella: { folder: "./assets/fiorella", prefix: "fiorella_", count: 18, label: "Fiorella's Gifts",     className: "gifts",    pad: 3 },
-  shinny:   { folder: "./assets/shinny",   prefix: "shinny_",   count: 26, label: "Shinny Ribbons",       className: "ribbons",  pad: 3 },
-  alvin:    { folder: "./assets/alvin",    prefix: "alvin_",    count: 11,  label: "Alvin's Apparel",      className: "apparel",  pad: 3 },
-  cool:     { folder: "./assets/cool",     prefix: "cool_",     count: 9,  label: "Cool Vinyls",          className: "cool",    pad: 3 }
+  home:     { folder: "./assets/home",     prefix: "home_",     count: 10, label: "Our Home",             className: "ourhome", pad: 0 },
+  mariana:  { folder: "./assets/mariana",  prefix: "mariana_",  count: 171, label: "Mariana's Collection", className: "bouquets", pad: 0 },
+  fiorella: { folder: "./assets/fiorella", prefix: "fiorella_", count: 13, label: "Fiorella's Gifts",     className: "gifts",    pad: 0 },
+  shinny:   { folder: "./assets/shinny",   prefix: "shinny_",   count: 18, label: "Shinny Ribbons",       className: "ribbons",  pad: 0 },
+  alvin:    { folder: "./assets/alvin",    prefix: "alvin_",    count: 11,  label: "Alvin's Apparel",      className: "apparel",  pad: 0 },
+  cool:     { folder: "./assets/cool",     prefix: "cool_",     count: 9,  label: "Cool Vinyls",          className: "cool",    pad: 0 }
 };
 
 let galleries = {}; // filename arrays per key
@@ -299,7 +300,7 @@ if (IS_GALLERY_PAGE) {
 function buildBases(prefix, count, pad = 0, start = 1) {
   return Array.from({ length: count }, (_, i) =>
     `${prefix}${String(i + start).padStart(pad, "0")}`
-  );
+  ).reverse(); //Addded .reverse to display the latest images first.
 }
 
 /* =========================
