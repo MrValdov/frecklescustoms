@@ -5,7 +5,7 @@
    ========================================= */
 const GALLERY_CONFIG = {
   home:     { folder: "./assets/home",     prefix: "home_",     count: 10, label: "Our Home",             className: "ourhome", pad: 0 },
-  mariana:  { folder: "./assets/mariana",  prefix: "mariana_",  count: 171, label: "Mariana's Collection", className: "bouquets", pad: 0 },
+  mariana:  { folder: "./assets/mariana",  prefix: "mariana_",  count: 175, label: "Mariana's Collection", className: "bouquets", pad: 0 },
   fiorella: { folder: "./assets/fiorella", prefix: "fiorella_", count: 13, label: "Fiorella's Gifts",     className: "gifts",    pad: 0 },
   shinny:   { folder: "./assets/shinny",   prefix: "shinny_",   count: 18, label: "Shinny Ribbons",       className: "ribbons",  pad: 0 },
   alvin:    { folder: "./assets/alvin",    prefix: "alvin_",    count: 11,  label: "Alvin's Apparel",      className: "apparel",  pad: 0 },
