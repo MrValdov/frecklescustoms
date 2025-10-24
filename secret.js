@@ -87,6 +87,7 @@ function render(items) {
     const img = document.createElement("img");
     img.src = it.src;
     img.alt = it.sku || "item";
+    img.width = 200;  
 
     const meta = document.createElement("div");
     meta.className = "meta";
