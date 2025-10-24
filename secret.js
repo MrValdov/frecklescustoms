@@ -16,7 +16,7 @@
  *
  * Then visit: /secret.html?k=sunflower
  */
-const AUTH_HASH = "0b6e8fe7aa7f5fb8b9ce9c5a9a7b9c2d4d6f2a0a7b1a9d0d9b9b154e1e3d2b7f"; // <-- replace with your own
+const AUTH_HASH = "981f186fb4a95e346ef08c2f69e08b96d4d0fe6d476e64466f870597d216317e"; // <-- replace with your own
 
 // Minimal “database” right in the file.
 // Add/edit rows: src (full-size image), price, sku, note (optional).
