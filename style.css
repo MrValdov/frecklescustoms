@@ -26,7 +26,7 @@ html { scrollbar-gutter: stable overlay; }
 body {
   user-select: none;
   -webkit-user-drag: none;
-  background-color: #f5dada;
+  background-color: #ffffff;
   font-family: "Architects Daughter", sans-serif;
   /* Push content below banner + navbar (80px desktop / 65px mobile) */
   padding-top: calc(var(--banner-h, 0px) + 80px);
